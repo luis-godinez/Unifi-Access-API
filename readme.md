@@ -31,9 +31,11 @@ cd unifi-access-api
 
 ### 3. Generate Code
 
-Javascript `npm run generate:js`
+Javascript: `npm run generate:js`
 
 Typescript: `npm run generate:ts`
+
+Python: `npm run generate:python`
 
 ### 4. Use in your project
 
@@ -45,6 +47,9 @@ Javascript(ES6):
 
 Typescript:  
 `import { Visitor } from '../path/to/generated/dist/visitor_pb';`
+
+Python:  
+`from path.to.generated.dist import visitor_pb2`
 
 ## Contribution:
 
