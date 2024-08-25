@@ -8,8 +8,9 @@
   "description": "",
   "scripts": {
     "clean": "rm -rf dist && mkdir dist",
-    "generate:js": "npm run clean && protoc --js_out=import_style=commonjs,binary:dist proto/*.proto",
-    "generate:ts": "npm run clean && protoc --plugin=protoc-gen-ts=./node_modules/.bin/protoc-gen-ts --ts_out=dist proto/*.proto"
+    "generate:js": "npm run clean && protoc --js_out=import_style=commonjs,binary:dist --proto_path=proto proto/*.proto",
+    "generate:ts": "npm run clean && protoc --plugin=protoc-gen-ts=./node_modules/.bin/protoc-gen-ts --ts_out=dist --proto_path=proto proto/*.proto",
+    "generate:python": "npm run clean && protoc --python_out=dist --proto_path=proto proto/*.proto"
   },
   "dependencies": {
     "protoc-gen-js": "^3.21.2",
