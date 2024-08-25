@@ -1,0 +1,144 @@
+syntax = "proto3";
+
+package space;
+
+message Space {
+    string id = 1;
+    string name = 2;
+    repeated Floor floors = 3;
+}
+
+message Floor {
+    string id = 1;
+    string name = 2;
+    repeated Door resources = 3;
+}
+
+message Door {
+    string id = 1;
+    string name = 2;
+    string type = 3; // e.g., "door"
+    bool is_bind_hub = 4; // Indicates if the door is bound to a hub device
+}
+
+service SpaceService {
+    rpc FetchDoorGroupTopology(FetchDoorGroupTopologyRequest) returns (FetchDoorGroupTopologyResponse);
+    rpc CreateDoorGroup(CreateDoorGroupRequest) returns (DoorGroupResponse);
+    rpc FetchDoorGroup(FetchDoorGroupRequest) returns (DoorGroupResponse);
+    rpc UpdateDoorGroup(UpdateDoorGroupRequest) returns (DoorGroupResponse);
+    rpc FetchAllDoorGroups(FetchAllDoorGroupsRequest) returns (DoorGroupsResponse);
+    rpc DeleteDoorGroup(DeleteDoorGroupRequest) returns (DeleteDoorGroupResponse);
+    rpc FetchDoor(FetchDoorRequest) returns (DoorResponse);
+    rpc FetchAllDoors(FetchAllDoorsRequest) returns (DoorsResponse);
+    rpc RemoteDoorUnlocking(RemoteDoorUnlockingRequest) returns (DoorUnlockResponse);
+    rpc SetTemporaryDoorLockingRule(SetTemporaryDoorLockingRuleRequest) returns (DoorLockingRuleResponse);
+}
+
+message FetchDoorGroupTopologyRequest {}
+
+message FetchDoorGroupTopologyResponse {
+    string code = 1;
+    string msg = 2;
+    repeated DoorGroupTopology data = 3;
+}
+
+message DoorGroupTopology {
+    string id = 1;
+    string name = 2;
+    repeated Floor floors = 3;
+}
+
+message CreateDoorGroupRequest {
+    string name = 1;
+    repeated string resources = 2; // List of door IDs
+}
+
+message DoorGroupResponse {
+    string code = 1;
+    string msg = 2;
+    DoorGroup data = 3;
+}
+
+message DoorGroup {
+    string id = 1;
+    string name = 2;
+    repeated string resources = 3; // List of door IDs
+}
+
+message FetchDoorGroupRequest {
+    string id = 1;
+}
+
+message UpdateDoorGroupRequest {
+    string id = 1;
+    string name = 2;
+    repeated string resources = 3;
+}
+
+message FetchAllDoorGroupsRequest {
+    int32 page_num = 1;
+    int32 page_size = 2;
+}
+
+message DoorGroupsResponse {
+    string code = 1;
+    string msg = 2;
+    repeated DoorGroup data = 3;
+    Pagination pagination = 4;
+}
+
+message DeleteDoorGroupRequest {
+    string id = 1;
+}
+
+message DeleteDoorGroupResponse {
+    string code = 1;
+    string msg = 2;
+}
+
+message FetchDoorRequest {
+    string id = 1;
+}
+
+message DoorResponse {
+    string code = 1;
+    string msg = 2;
+    Door data = 3;
+}
+
+message FetchAllDoorsRequest {
+    int32 page_num = 1;
+    int32 page_size = 2;
+}
+
+message DoorsResponse {
+    string code = 1;
+    string msg = 2;
+    repeated Door data = 3;
+    Pagination pagination = 4;
+}
+
+message RemoteDoorUnlockingRequest {
+    string id = 1; // Door ID
+}
+
+message DoorUnlockResponse {
+    string code = 1;
+    string msg = 2;
+}
+
+message SetTemporaryDoorLockingRuleRequest {
+    string door_id = 1;
+    string rule = 2; // The rule to apply
+}
+
+message DoorLockingRuleResponse {
+    string code = 1;
+    string msg = 2;
+}
+
+message Pagination {
+    int32 page_num = 1;
+    int32 page_size = 2;
+    int32 total = 3;
+}

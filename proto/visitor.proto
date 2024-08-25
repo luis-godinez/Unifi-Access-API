@@ -1,0 +1,159 @@
+syntax = "proto3";
+
+package visitor;
+
+message Visitor {
+  string id = 1;
+  string first_name = 2;
+  string last_name = 3;
+  string mobile_phone = 4;
+  string email = 5;
+  string visitor_company = 6;
+  int64 start_time = 7;
+  int64 end_time = 8;
+  string visit_reason = 9;
+  repeated Resource resources = 10;
+  WeekSchedule week_schedule = 11;
+  repeated NFC_Card nfc_cards = 12;
+  PIN_Code pin_code = 13;
+  Status status = 14;
+  string inviter_id = 15;
+  string inviter_name = 16;
+  string remarks = 17;
+  string schedule_id = 18; // Added field for schedule ID
+}
+
+message Resource {
+  string id = 1;
+  string name = 2;
+  string type = 3; // "door" or "door_group"
+}
+
+message WeekSchedule {
+  repeated DaySchedule monday = 1;
+  repeated DaySchedule tuesday = 2;
+  repeated DaySchedule wednesday = 3;
+  repeated DaySchedule thursday = 4;
+  repeated DaySchedule friday = 5;
+  repeated DaySchedule saturday = 6;
+  repeated DaySchedule sunday = 7;
+}
+
+message DaySchedule {
+  string start_time = 1;
+  string end_time = 2;
+}
+
+message NFC_Card {
+  string id = 1;
+  string token = 2;
+  string type = 3; // Added field for card type
+}
+
+message PIN_Code { string token = 1; }
+
+enum Status {
+  UPCOMING = 0;
+  VISITED = 1;
+  VISITING = 2;
+  CANCELLED = 3;
+  NO_VISIT = 4;
+  ACTIVE = 5;
+}
+
+service VisitorService {
+  rpc CreateVisitor(CreateVisitorRequest) returns (VisitorResponse);
+  rpc UpdateVisitor(UpdateVisitorRequest) returns (VisitorResponse);
+  rpc FetchVisitor(FetchVisitorRequest) returns (VisitorResponse);
+  rpc FetchAllVisitors(FetchAllVisitorsRequest) returns (VisitorsResponse);
+  rpc AssignNFC_CardToVisitor(AssignNFC_CardRequest) returns (VisitorResponse);
+  rpc UnassignNFC_CardFromVisitor(UnassignNFC_CardRequest)
+      returns (VisitorResponse);
+  rpc AssignPINCodeToVisitor(AssignPINCodeRequest) returns (VisitorResponse);
+  rpc UnassignPINCodeFromVisitor(UnassignPINCodeRequest)
+      returns (VisitorResponse);
+  rpc DeleteVisitor(DeleteVisitorRequest) returns (VisitorResponse);
+}
+
+message CreateVisitorRequest {
+  string first_name = 1;
+  string last_name = 2;
+  string mobile_phone = 3;
+  string email = 4;
+  string visitor_company = 5;
+  int64 start_time = 6;
+  int64 end_time = 7;
+  string visit_reason = 8;
+  repeated Resource resources = 9;
+  WeekSchedule week_schedule = 10;
+  string schedule_id = 11; // Added field for schedule ID
+}
+
+message UpdateVisitorRequest {
+  string id = 1;
+  string first_name = 2;
+  string last_name = 3;
+  string mobile_phone = 4;
+  string email = 5;
+  string visitor_company = 6;
+  int64 start_time = 7;
+  int64 end_time = 8;
+  string visit_reason = 9;
+  repeated Resource resources = 10;
+  WeekSchedule week_schedule = 11;
+  Status status = 12;
+  string schedule_id = 13; // Added field for schedule ID
+}
+
+message FetchVisitorRequest { string id = 1; }
+
+message FetchAllVisitorsRequest {
+  int32 page_num = 1;
+  int32 page_size = 2;
+  string keyword = 3;
+}
+
+message AssignNFC_CardRequest {
+  string id = 1;
+  string token = 2;
+  bool force_add = 3;
+}
+
+message UnassignNFC_CardRequest {
+  string id = 1;
+  string token = 2;
+}
+
+message AssignPINCodeRequest {
+  string id = 1;
+  string token = 2;
+}
+
+message UnassignPINCodeRequest {
+  string id = 1;
+  string token = 2;
+}
+
+message DeleteVisitorRequest {
+  string id = 1;
+  bool is_force = 2;
+}
+
+message VisitorResponse {
+  string code = 1;
+  string msg = 2;
+  Visitor data = 3;
+}
+
+message VisitorsResponse {
+  string code = 1;
+  string msg = 2;
+  repeated Visitor data = 3;
+  Pagination pagination = 4;
+}
+
+message Pagination {
+  int32 page_num = 1;
+  int32 page_size = 2;
+  int32 total = 3;
+}

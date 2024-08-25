@@ -1,0 +1,9 @@
+# Ignore node_modules directories
+node_modules/
+
+# Ignore generated files from Protocol Buffers
+dist/
+
+# Ignore OS-specific files
+.DS_Store
+Thumbs.db

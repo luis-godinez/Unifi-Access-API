@@ -1,0 +1,117 @@
+syntax = "proto3";
+
+package systemlog;
+
+message SystemLog {
+    string id = 1;
+    Event event = 2;
+    Actor actor = 3;
+    Authentication authentication = 4;
+    repeated Target targets = 5;
+    int64 timestamp = 6;
+}
+
+message Event {
+    string display_message = 1;
+    string result = 2;  // "BLOCKED", "GRANTED"
+    string type = 3;  // "access.door.unlock"
+    int64 published = 4;
+    string reason = 5;
+    string reason_code = 6;  // Added based on documentation
+}
+
+message Actor {
+    string id = 1;
+    string display_name = 2;
+    string type = 3;  // "user"
+    string alternate_id = 4;
+    string alternate_name = 5;
+}
+
+message Authentication {
+    string credential_provider = 1;  // "NFC", "PIN"
+    string issuer = 2;
+    string type = 3;  // Added based on documentation
+}
+
+message Target {
+    string id = 1;
+    string display_name = 2;
+    string type = 3;  // "door", "device"
+    string alternate_id = 4;
+    string alternate_name = 5;
+}
+
+service SystemLogService {
+    rpc FetchSystemLogs(FetchSystemLogsRequest) returns (SystemLogsResponse);
+    rpc ExportSystemLogs(ExportSystemLogsRequest) returns (ExportSystemLogsResponse);
+    rpc FetchResourcesInSystemLogs(FetchResourcesRequest) returns (ResourcesResponse);
+    rpc FetchStaticResources(FetchStaticResourcesRequest) returns (StaticResourcesResponse);
+}
+
+message FetchSystemLogsRequest {
+    string topic = 1;  // "door_openings", "critical", etc.
+    int64 since = 2;  // Start time for log fetching
+    int64 until = 3;  // End time for log fetching
+    string timezone = 4;  // Timezone for formatting time, e.g., "America/New_York"
+    string actor_id = 5;  // Identity ID of the actor (optional)
+    int32 page_num = 6;  // Current page number
+    int32 page_size = 7;  // Number of logs per page
+    repeated string event_types = 8;  // Added based on documentation
+}
+
+message ExportSystemLogsRequest {
+    string topic = 1;
+    int64 since = 2;
+    int64 until = 3;
+    string timezone = 4;
+    string actor_id = 5;
+    string format = 6;  // Added based on documentation
+}
+
+message FetchResourcesRequest {
+    string id = 1;  // Resource ID
+}
+
+message FetchStaticResourcesRequest {
+    string path = 1;  // Resource paths, e.g., "/avatar", "/capture", "activities_resource"
+}
+
+message SystemLogsResponse {
+    string code = 1;
+    string msg = 2;
+    repeated SystemLog data = 3;
+    Pagination pagination = 4;
+}
+
+message ExportSystemLogsResponse {
+    string code = 1;
+    string msg = 2;
+    string csv_url = 3;  // URL to download the exported CSV
+}
+
+message ResourcesResponse {
+    string code = 1;
+    string msg = 2;
+    repeated Resource data = 3;
+}
+
+message StaticResourcesResponse {
+    string code = 1;
+    string msg = 2;
+    string resource_url = 3;  // URL to the static resource
+}
+
+message Pagination {
+    int32 page_num = 1;
+    int32 page_size = 2;
+    int32 total = 3;
+}
+
+message Resource {
+    string id = 1;
+    string display_name = 2;
+    string type = 3;  // "activities_resource", etc.
+    string alternate_id = 4;
+    string alternate_name = 5;
+}

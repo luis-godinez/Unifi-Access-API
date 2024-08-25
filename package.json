@@ -1,0 +1,19 @@
+{
+  "name": "unifi-access-api",
+  "version": "1.0.0",
+  "main": "index.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "scripts": {
+    "clean": "rm -rf dist && mkdir dist",
+    "generate:js": "npm run clean && protoc --js_out=import_style=commonjs,binary:dist proto/*.proto",
+    "generate:ts": "npm run clean && protoc --plugin=protoc-gen-ts=./node_modules/.bin/protoc-gen-ts --ts_out=dist proto/*.proto"
+  },
+  "dependencies": {
+    "protoc-gen-js": "^3.21.2",
+    "protoc-gen-ts": "^0.8.7",
+    "ts-protoc-gen": "^0.15.0"
+  }
+}

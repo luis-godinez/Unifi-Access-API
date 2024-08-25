@@ -1,0 +1,69 @@
+syntax = "proto3";
+
+package accesspolicy;
+
+message AccessPolicy {
+  string id = 1;
+  string name = 2;
+  repeated Resource resources = 3;
+  string schedule_id = 4;
+}
+
+message Resource {
+  string id = 1;
+  string type = 2; // "door" or "door_group"
+}
+
+service AccessPolicyService {
+  rpc CreateAccessPolicy(CreateAccessPolicyRequest)
+      returns (AccessPolicyResponse);
+  rpc UpdateAccessPolicy(UpdateAccessPolicyRequest)
+      returns (AccessPolicyResponse);
+  rpc FetchAccessPolicy(FetchAccessPolicyRequest)
+      returns (AccessPolicyResponse);
+  rpc FetchAllAccessPolicies(FetchAllAccessPoliciesRequest)
+      returns (AccessPoliciesResponse);
+  rpc DeleteAccessPolicy(DeleteAccessPolicyRequest)
+      returns (AccessPolicyResponse);
+}
+
+message CreateAccessPolicyRequest {
+  string name = 1;
+  repeated Resource resources = 2;
+  string schedule_id = 3;
+}
+
+message UpdateAccessPolicyRequest {
+  string id = 1;
+  string name = 2;
+  repeated Resource resources = 3;
+  string schedule_id = 4;
+}
+
+message FetchAccessPolicyRequest { string id = 1; }
+
+message FetchAllAccessPoliciesRequest {
+  int32 page_num = 1;
+  int32 page_size = 2;
+}
+
+message DeleteAccessPolicyRequest { string id = 1; }
+
+message AccessPolicyResponse {
+  string code = 1;
+  string msg = 2;
+  AccessPolicy data = 3;
+}
+
+message AccessPoliciesResponse {
+  string code = 1;
+  string msg = 2;
+  repeated AccessPolicy data = 3;
+  Pagination pagination = 4;
+}
+
+message Pagination {
+  int32 page_num = 1;
+  int32 page_size = 2;
+  int32 total = 3;
+}

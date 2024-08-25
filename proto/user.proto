@@ -1,0 +1,122 @@
+syntax = "proto3";
+
+package user;
+
+message User {
+    string id = 1;
+    string first_name = 2;
+    string last_name = 3;
+    string user_email = 4;
+    string employee_number = 5;
+    int64 onboard_time = 6;
+    repeated string access_policy_ids = 7;
+    repeated NFC_Card nfc_cards = 8;
+    PIN_Code pin_code = 9;
+    Status status = 10;
+    string full_name = 11; // Full name field added
+    string phone = 12; // Phone number field added
+    string alias = 13; // Preferred name field added
+}
+
+message NFC_Card {
+    string id = 1;
+    string token = 2;
+}
+
+message PIN_Code {
+    string token = 1;
+}
+
+enum Status {
+    ACTIVE = 0;
+    PENDING = 1;
+    DEACTIVATED = 2;
+}
+
+service UserService {
+    rpc CreateUser(CreateUserRequest) returns (UserResponse);
+    rpc UpdateUser(UpdateUserRequest) returns (UserResponse);
+    rpc FetchUser(FetchUserRequest) returns (UserResponse);
+    rpc FetchAllUsers(FetchAllUsersRequest) returns (UsersResponse);
+    rpc AssignAccessPolicyToUser(AssignAccessPolicyRequest) returns (UserResponse);
+    rpc AssignNFC_CardToUser(AssignNFC_CardRequest) returns (UserResponse);
+    rpc AssignPINCodeToUser(AssignPINCodeRequest) returns (UserResponse);
+    rpc UnassignNFC_CardFromUser(UnassignNFC_CardRequest) returns (UserResponse);
+    rpc UnassignPINCodeFromUser(UnassignPINCodeRequest) returns (UserResponse);
+}
+
+message CreateUserRequest {
+    string first_name = 1;
+    string last_name = 2;
+    string user_email = 3;
+    string employee_number = 4;
+    int64 onboard_time = 5;
+    string phone = 6; // Phone number field added
+    string alias = 7; // Preferred name field added
+}
+
+message UpdateUserRequest {
+    string id = 1;
+    string first_name = 2;
+    string last_name = 3;
+    string user_email = 4;
+    string employee_number = 5;
+    int64 onboard_time = 6;
+    Status status = 7;
+    string phone = 8; // Phone number field added
+    string alias = 9; // Preferred name field added
+}
+
+message FetchUserRequest {
+    string id = 1;
+}
+
+message FetchAllUsersRequest {
+    int32 page_num = 1;
+    int32 page_size = 2;
+}
+
+message AssignAccessPolicyRequest {
+    string id = 1;
+    repeated string access_policy_ids = 2;
+}
+
+message AssignNFC_CardRequest {
+    string id = 1;
+    string token = 2;
+    bool force_add = 3;
+}
+
+message AssignPINCodeRequest {
+    string id = 1;
+    string token = 2;
+}
+
+message UnassignNFC_CardRequest {
+    string id = 1;
+    string token = 2;
+}
+
+message UnassignPINCodeRequest {
+    string id = 1;
+    string token = 2;
+}
+
+message UserResponse {
+    string code = 1;
+    string msg = 2;
+    User data = 3;
+}
+
+message UsersResponse {
+    string code = 1;
+    string msg = 2;
+    repeated User data = 3;
+    Pagination pagination = 4;
+}
+
+message Pagination {
+    int32 page_num = 1;
+    int32 page_size = 2;
+    int32 total = 3;
+}

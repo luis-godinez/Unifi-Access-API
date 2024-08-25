@@ -1,0 +1,61 @@
+syntax = "proto3";
+
+package unifyidentity;
+
+message Invitation {
+    string user_id = 1;
+    string email = 2;
+}
+
+message ResourceAssignment {
+    string resource_type = 1;  // Type of resource, e.g., "ev_station", "vpn", "wifi", "camera"
+    repeated string resource_ids = 2;
+}
+
+service UnifyIdentityService {
+    rpc SendInvitation(SendInvitationRequest) returns (InvitationResponse);
+    rpc FetchAvailableResources(FetchAvailableResourcesRequest) returns (ResourcesResponse);
+    rpc AssignResourcesToUser(AssignResourcesRequest) returns (AssignmentResponse);
+    rpc FetchResourcesAssignedToUser(FetchAssignedResourcesRequest) returns (AssignedResourcesResponse);
+}
+
+message SendInvitationRequest {
+    repeated Invitation invitations = 1;
+}
+
+message FetchAvailableResourcesRequest {
+    string resource_type = 1;  // E.g., "ev_station", "vpn", "wifi", "camera"
+}
+
+message AssignResourcesRequest {
+    string user_id = 1;
+    repeated ResourceAssignment assignments = 2;
+}
+
+message FetchAssignedResourcesRequest {
+    string user_id = 1;
+}
+
+message InvitationResponse {
+    string code = 1;
+    string msg = 2;
+    repeated Invitation data = 3;
+}
+
+message ResourcesResponse {
+    string code = 1;
+    string msg = 2;
+    repeated string resource_ids = 3;
+}
+
+message AssignmentResponse {
+    string code = 1;
+    string msg = 2;
+    repeated ResourceAssignment data = 3;
+}
+
+message AssignedResourcesResponse {
+    string code = 1;
+    string msg = 2;
+    repeated ResourceAssignment data = 3;
+}

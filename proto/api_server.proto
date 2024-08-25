@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package apiserver;
+
+service APIServerService {
+  rpc UploadHTTPSCertificate(UploadHTTPSCertificateRequest)
+      returns (APIServerResponse);
+  rpc DeleteHTTPSCertificate(DeleteHTTPSCertificateRequest)
+      returns (APIServerResponse);
+}
+
+message UploadHTTPSCertificateRequest {
+  string key = 1;  // Path to the private key file
+  string cert = 2; // Path to the certificate file
+}
+
+message DeleteHTTPSCertificateRequest {
+  // No body content required for DELETE request
+}
+
+message APIServerResponse {
+  string code = 1; // Response code, e.g., "SUCCESS"
+  string msg = 2;  // Response message, e.g., "success"
+  string data = 3; // Additional data, if any
+}

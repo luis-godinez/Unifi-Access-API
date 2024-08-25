@@ -1,0 +1,100 @@
+syntax = "proto3";
+
+package notification;
+
+message WebSocketPayload {
+  string event = 1;
+  string receiver_id = 2;
+  string event_object_id = 3;
+  bool save_to_history = 4;
+  WebSocketData data = 5;
+  int64 create_time = 6;
+}
+
+message WebSocketData {
+  string channel = 1;
+  string token = 2;
+  string device_id = 3;
+  string device_type = 4; // e.g., "UA-G2-PRO"
+  string device_name = 5;
+  string door_name = 6;
+  string controller_id = 7;
+  string floor_name = 8;
+  string request_id = 9;
+  string clear_request_id = 10;
+  string in_or_out = 11;
+}
+
+service NotificationService {
+  rpc FetchNotifications(FetchNotificationsRequest)
+      returns (NotificationsResponse);
+  rpc ListSupportedWebhookEvents(ListSupportedWebhookEventsRequest)
+      returns (WebhookEventsResponse);
+  rpc FetchWebhookEndpointsList(FetchWebhookEndpointsListRequest)
+      returns (WebhookEndpointsResponse);
+  rpc AddWebhookEndpoints(AddWebhookEndpointsRequest)
+      returns (WebhookEndpointResponse);
+  rpc DeleteWebhookEndpoints(DeleteWebhookEndpointsRequest)
+      returns (WebhookEndpointResponse);
+  rpc AllowWebhookEndpointOwnerToReceiveEvents(AllowWebhookEndpointOwnerRequest)
+      returns (WebhookResponse);
+}
+
+message FetchNotificationsRequest {
+  // No fields required as it is a WebSocket connection
+}
+
+message ListSupportedWebhookEventsRequest {
+  // No fields required for this request
+}
+
+message FetchWebhookEndpointsListRequest { string id = 1; }
+
+message AddWebhookEndpointsRequest {
+  string endpoint = 1;
+  repeated string events = 2;
+  string secret = 3;
+}
+
+message DeleteWebhookEndpointsRequest { string id = 1; }
+
+message AllowWebhookEndpointOwnerRequest {
+  string id = 1;
+  string secret = 2;
+}
+
+message NotificationsResponse {
+  string code = 1;
+  string msg = 2;
+  repeated WebSocketPayload data = 3;
+}
+
+message WebhookEventsResponse {
+  string code = 1;
+  string msg = 2;
+  repeated string events = 3;
+}
+
+message WebhookEndpointsResponse {
+  string code = 1;
+  string msg = 2;
+  repeated WebhookEndpoint data = 3;
+}
+
+message WebhookEndpointResponse {
+  string code = 1;
+  string msg = 2;
+  WebhookEndpoint data = 3;
+}
+
+message WebhookResponse {
+  string code = 1;
+  string msg = 2;
+}
+
+message WebhookEndpoint {
+  string id = 1;
+  string endpoint = 2;
+  repeated string events = 3;
+  string secret = 4;
+}

@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package device;
+
+message Device {
+  string id = 1;
+  string name = 2;
+  string type = 3;
+  string full_name = 4;
+}
+
+service DeviceService {
+  rpc FetchDevices(FetchDevicesRequest) returns (DevicesResponse);
+}
+
+message FetchDevicesRequest {}
+
+message DevicesResponse {
+  string code = 1;
+  string msg = 2;
+  repeated Device data = 3;
+}
