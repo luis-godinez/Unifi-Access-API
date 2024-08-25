@@ -14,7 +14,7 @@ This is unofficial API documentation for the Ubiquiti Access API. It is provided
 
 ## API Documentation
 
-[View API Documentation](./docs/index.html)
+[View API Documentation](https://htmlpreview.github.io/?https://github.com/luis-godinez/Unifi-Access-API/blob/main/docs/index.html)
 
 ## Getting Started
 
