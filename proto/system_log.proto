@@ -2,116 +2,204 @@ syntax = "proto3";
 
 package systemlog;
 
-message SystemLog {
-    string id = 1;
-    Event event = 2;
-    Actor actor = 3;
-    Authentication authentication = 4;
-    repeated Target targets = 5;
-    int64 timestamp = 6;
-}
-
-message Event {
-    string display_message = 1;
-    string result = 2;  // "BLOCKED", "GRANTED"
-    string type = 3;  // "access.door.unlock"
-    int64 published = 4;
-    string reason = 5;
-    string reason_code = 6;  // Added based on documentation
-}
-
-message Actor {
-    string id = 1;
-    string display_name = 2;
-    string type = 3;  // "user"
-    string alternate_id = 4;
-    string alternate_name = 5;
-}
-
-message Authentication {
-    string credential_provider = 1;  // "NFC", "PIN"
-    string issuer = 2;
-    string type = 3;  // Added based on documentation
-}
-
-message Target {
-    string id = 1;
-    string display_name = 2;
-    string type = 3;  // "door", "device"
-    string alternate_id = 4;
-    string alternate_name = 5;
-}
+import "google/api/annotations.proto";
 
 service SystemLogService {
-    rpc FetchSystemLogs(FetchSystemLogsRequest) returns (SystemLogsResponse);
-    rpc ExportSystemLogs(ExportSystemLogsRequest) returns (ExportSystemLogsResponse);
-    rpc FetchResourcesInSystemLogs(FetchResourcesRequest) returns (ResourcesResponse);
-    rpc FetchStaticResources(FetchStaticResourcesRequest) returns (StaticResourcesResponse);
+  // 9.2 Fetch System Logs
+  rpc FetchSystemLogs(FetchSystemLogsRequest)
+      returns (FetchSystemLogsResponse) {
+    option (google.api.http) = {
+      get : "/api/v1/developer/system/logs"
+    };
+  }
+  // 9.3 Export System Logs
+  rpc ExportSystemLogs(ExportSystemLogsRequest)
+      returns (ExportSystemLogsResponse) {
+    option (google.api.http) = {
+      post : "/api/v1/developer/system/logs/export"
+      body : "*"
+    };
+  }
+
+  // 9.4 Fetch Resources in System Logs
+  rpc FetchResourcesInSystemLogs(FetchResourcesInSystemLogsRequest)
+      returns (FetchResourcesInSystemLogsResponse) {
+    option (google.api.http) = {
+      get : "api/v1/developer/system/logs/resource/{id}"
+    };
+  }
+
+  // 9.5 Fetch Static Resources in System Logs
+  rpc FetchStaticResourcesInSystemLogs(FetchStaticResourcesInSystemLogsRequest)
+      returns (FetchStaticResourcesInSystemLogsResponse) {
+    option (google.api.http) = {
+      get : " api/v1/developer/system/static/{path}"
+    };
+  }
 }
 
+// --------------------
+
+// 9.2 Fetch System Logs
+message FetchSystemLogsRequestPath {}
+message FetchSystemLogsRequestParams {
+  string page_num = 1;  // Current page number in the pagination.
+  string page_size = 2; // Number of logs per page.
+}
+message FetchSystemLogsRequestBody {
+  string topic =
+      1; // Fetch different system logs by topic. enum topic
+         // {critical,door_openings,updates,device_events,admin_activity,visitor}
+  int32 since = 2;     // Start time for log fetching, ex: 1689304925
+  int32 until = 3;     // End time for log fetching, ex: 1689804925
+  string actor_id = 4; // Identity ID of the actor (user, visitor, and device),
+                       // ex: 3e1f196e-c97b-4748-aecb-eab5e9c251b2
+}
 message FetchSystemLogsRequest {
-    string topic = 1;  // "door_openings", "critical", etc.
-    int64 since = 2;  // Start time for log fetching
-    int64 until = 3;  // End time for log fetching
-    string timezone = 4;  // Timezone for formatting time, e.g., "America/New_York"
-    string actor_id = 5;  // Identity ID of the actor (optional)
-    int32 page_num = 6;  // Current page number
-    int32 page_size = 7;  // Number of logs per page
-    repeated string event_types = 8;  // Added based on documentation
+  FetchSystemLogsRequestPath path = 1;
+  FetchSystemLogsRequestParams params = 2;
+  FetchSystemLogsRequestBody body = 3;
 }
 
+// 9.3 Export System Logs
+message ExportSystemLogsRequestPath {}
+message ExportSystemLogsRequestParams {}
+message ExportSystemLogsRequestBody {
+  string topic =
+      1; // Fetch different system logs by topic. enum topic
+         // {critical,door_openings,updates,device_events,admin_activity,visitor}
+  int32 since = 2;     // Start time for log fetching, ex: 1689304925
+  int32 until = 3;     // End time for log fetching, ex: 1689804925
+  string timezone = 4; // Timezone for formatting time, ex: America/New_York
+  string actor_id = 5; // Identity ID of the actor (user, visitor, and device),
+                       // ex: 3e1f196e-c97b-4748-aecb-eab5e9c251b2
+}
 message ExportSystemLogsRequest {
-    string topic = 1;
-    int64 since = 2;
-    int64 until = 3;
-    string timezone = 4;
-    string actor_id = 5;
-    string format = 6;  // Added based on documentation
+  ExportSystemLogsRequestPath path = 1;
+  ExportSystemLogsRequestParams params = 2;
+  ExportSystemLogsRequestBody body = 3;
 }
 
-message FetchResourcesRequest {
-    string id = 1;  // Resource ID
+// 9.4 Fetch Resources in System Logs
+message FetchResourcesInSystemLogsRequestPath {
+  string id = 1; // Resource ID is obtained from targets categorized as the
+                 // 'activities_resource' type in system logs.
+  // "target": [{"type": "activities_resource","id": "0418d6a38f00-b6906057-
+  // 2a90-4426-835c-b5b172381fec","display_name": "Resource","alternate_id":
+  // "","alternate_name": ""}]
 }
 
-message FetchStaticResourcesRequest {
-    string path = 1;  // Resource paths, e.g., "/avatar", "/capture", "activities_resource"
+message FetchResourcesInSystemLogsRequestParams {}
+message FetchResourcesInSystemLogsRequestBody {}
+message FetchResourcesInSystemLogsRequest {
+  FetchResourcesInSystemLogsRequestPath path = 1;
+  FetchResourcesInSystemLogsRequestParams params = 2;
+  FetchResourcesInSystemLogsRequestBody body = 3;
 }
 
-message SystemLogsResponse {
-    string code = 1;
-    string msg = 2;
-    repeated SystemLog data = 3;
-    Pagination pagination = 4;
+// 9.5 Fetch Static Resources in System Logs
+message FetchStaticResourcesInSystemLogsRequestPath {
+  string path = 1; // Resource paths, currently supporting /avatar, /capture,
+                   // and activities_resource.
+}
+message FetchStaticResourcesInSystemLogsRequestParams {}
+message FetchStaticResourcesInSystemLogsRequestBody {}
+message FetchStaticResourcesInSystemLogsRequest {
+  FetchStaticResourcesInSystemLogsRequestPath path = 1;
+  FetchStaticResourcesInSystemLogsRequestParams params = 2;
+  FetchStaticResourcesInSystemLogsRequestBody body = 3;
+}
+
+// --------------
+
+message ResourcesInSystemLog {
+  string video_record = 1;
+  string video_record_thumbnail = 2;
+  string created_at = 3;
+  string updated_at = 4;
+}
+
+message FetchResourcesInSystemLogsResponse {
+  string code = 1;
+  string msg = 2;
+  ResourcesInSystemLog data = 3;
+}
+
+message FetchStaticResourcesInSystemLogsResponse {
+  string code = 1;
+  string msg = 2;
+  string data = 3; // I assume this is an object, but not documented in API
 }
 
 message ExportSystemLogsResponse {
-    string code = 1;
-    string msg = 2;
-    string csv_url = 3;  // URL to download the exported CSV
+  string code = 1;
+  string msg = 2;
+  bytes file = 3; // Exported csv file
 }
 
-message ResourcesResponse {
-    string code = 1;
-    string msg = 2;
-    repeated Resource data = 3;
+message SystemLogSource {
+  Actor actor = 1;
+  Event event = 2;
+  Authentication authentication = 3;
+  repeated Target target = 4;
 }
 
-message StaticResourcesResponse {
-    string code = 1;
-    string msg = 2;
-    string resource_url = 3;  // URL to the static resource
+message SystemLog {
+  string timestamp = 1;
+  string _id = 2;
+  SystemLogSource _source = 3;
+  string tag = 4;
 }
 
-message Pagination {
-    int32 page_num = 1;
-    int32 page_size = 2;
-    int32 total = 3;
+message SystemLogs { repeated SystemLog hits = 1; }
+
+message FetchSystemLogsResponse {
+  string code = 1;
+  SystemLogs data = 2;
+  string msg = 3;
 }
 
-message Resource {
-    string id = 1;
-    string display_name = 2;
-    string type = 3;  // "activities_resource", etc.
-    string alternate_id = 4;
-    string alternate_name = 5;
+message Actor {
+  string alternative_id = 1;
+  string alternative_name = 2;
+  string display_name = 3;
+  string id = 4;
+  string type = 5;
+}
+
+message Event {
+  string display_message = 1;
+  int32 published = 2;
+  string reason = 3;
+  string result = 4;
+  string type = 5;
+}
+
+message Authentication {
+  string credential_provider = 1;
+  string issuer = 2;
+}
+
+message Target {
+  string alternative_id = 1;
+  string alternative_name = 2;
+  string display_name = 3;
+  string id = 4;
+  string type = 5;
+}
+
+enum LogTopic {
+  // Note, the documentation specifies this is an enum but doesn't list the
+  // indexes.
+  ALL = 0;           // Fetch all logs
+  DOOR_OPENINGS = 1; // Fetch door opening logs
+  CRITICAL = 2; // Fetch logs for device restart, deletion, offline status, and
+                // detection
+  UPDATES = 3;  // Fetch device update logs
+  DEVICE_EVENTS =
+      4; // Fetch logs for device online status, device updates, access policy
+         // synchronization, and active and inactive door unlock schedules
+  ADMIN_ACTIVITY = 5; // Fetch logs for admin activity, such as access policy
+                      // updates, settings changes, and user management
+  VISITOR = 6;        // Fetch logs of visitor-related operations
 }

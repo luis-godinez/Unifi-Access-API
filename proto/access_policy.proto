@@ -1,53 +1,347 @@
 syntax = "proto3";
 
-package accesspolicy;
+package access_policy;
+
+import "google/api/annotations.proto";
+import "shared.proto";
+
+// Service definition
+service AccessPolicyService {
+  // 5.2 Create Access Policy
+  rpc CreateAccessPolicy(CreateAccessPolicyRequest)
+      returns (AccessPolicyResponse) {
+    option (google.api.http) = {
+      post : "/api/v1/developer/access_policies"
+      body : "*"
+    };
+  }
+
+  // 5.3 Update Access Policy
+  rpc UpdateAccessPolicy(UpdateAccessPolicyRequest)
+      returns (AccessPolicyResponse) {
+    option (google.api.http) = {
+      put : "/api/v1/developer/access_policies/{id}"
+      body : "*"
+    };
+  }
+
+  // 5.4 Delete Access Policy
+  rpc DeleteAccessPolicy(DeleteAccessPolicyRequest)
+      returns (AccessPolicyResponse) {
+    option (google.api.http) = {
+      delete : "/api/v1/developer/access_policies/{id}"
+    };
+  }
+
+  // 5.5 Fetch Access Policy
+  rpc FetchAccessPolicy(FetchAccessPolicyRequest)
+      returns (AccessPolicyResponse) {
+    option (google.api.http) = {
+      get : "/api/v1/developer/access_policies/{id}"
+    };
+  }
+
+  // 5.6 Fetch All Access Policies
+  rpc FetchAllAccessPolicies(FetchAllAccessPoliciesRequest)
+      returns (AccessPoliciesResponse) {
+    option (google.api.http) = {
+      get : "/api/v1/developer/access_policies"
+    };
+  }
+
+  // 5.8 Create Holiday Group
+  rpc CreateHolidayGroup(CreateHolidayGroupRequest)
+      returns (HolidayGroupResponse) {
+    option (google.api.http) = {
+      post : "/api/v1/developer/access_policies/holiday_groups"
+      body : "*"
+    };
+  }
+
+  // 5.9 Update Holiday Group
+  rpc UpdateHolidayGroup(UpdateHolidayGroupRequest)
+      returns (HolidayGroupResponse) {
+    option (google.api.http) = {
+      put : "/api/v1/developer/access_policies/holiday_groups/{id}"
+      body : "*"
+    };
+  }
+
+  // 5.10 Delete Holiday Group
+  rpc DeleteHolidayGroup(DeleteHolidayGroupRequest)
+      returns (HolidayGroupResponse) {
+    option (google.api.http) = {
+      delete : "/api/v1/developer/access_policies/holiday_groups/{id}"
+    };
+  }
+
+  // 5.11 Fetch Holiday Group
+  rpc FetchHolidayGroup(FetchHolidayGroupRequest)
+      returns (HolidayGroupResponse) {
+    option (google.api.http) = {
+      get : "/api/v1/developer/access_policies/holiday_groups/{id}"
+    };
+  }
+
+  // 5.12 Fetch All Holiday Groups
+  rpc FetchAllHolidayGroups(FetchAllHolidayGroupsRequest)
+      returns (HolidayGroupSummaryResponse) {
+    option (google.api.http) = {
+      get : "/api/v1/developer/access_policies/holiday_groups"
+    };
+  }
+
+  // 5.14 Create Schedule
+  rpc CreateSchedule(CreateScheduleRequest) returns (ScheduleResponse) {
+    option (google.api.http) = {
+      post : "/api/v1/developer/access_policies/schedules"
+      body : "*"
+    };
+  }
+
+  // 5.15 Update Schedule
+  rpc UpdateSchedule(UpdateScheduleRequest) returns (ScheduleResponse) {
+    option (google.api.http) = {
+      put : "/api/v1/developer/access_policies/schedules/{id}"
+      body : "*"
+    };
+  }
+
+  // 5.16 Fetch Schedule
+  rpc FetchSchedule(FetchScheduleRequest) returns (ScheduleResponse) {
+    option (google.api.http) = {
+      get : "/api/v1/developer/access_policies/schedules/{id}"
+    };
+  }
+
+  // 5.17 Fetch All Schedules
+  rpc FetchAllSchedules(FetchAllSchedulesRequest) returns (SchedulesResponse) {
+    option (google.api.http) = {
+      get : "/api/v1/developer/access_policies/schedules"
+    };
+  }
+
+  // 5.18 Delete Schedule
+  rpc DeleteSchedule(DeleteScheduleRequest) returns (ScheduleResponse) {
+    option (google.api.http) = {
+      delete : "/api/v1/developer/access_policies/schedules/{id}"
+    };
+  }
+}
+
+/////
+
+// 5.2 Create Access Policy
+message CreateAccessPolicyRequestPath {}
+message CreateAccessPolicyRequestParams {}
+message CreateAccessPolicyRequestBody {
+  string name = 1; // Name of the access policy.
+  repeated shared.Resource resource =
+      2; // Used to assign accessible locations to the access policy.
+  string schedule_id =
+      3; // Identity ID of the schedule. Assign additional schedules.
+}
+message CreateAccessPolicyRequest {
+  CreateAccessPolicyRequestPath path = 1;
+  CreateAccessPolicyRequestParams params = 2;
+  CreateAccessPolicyRequestBody body = 3;
+}
+
+// 5.3 Update Access Policy
+message UpdateAccessPolicyRequestPath {
+  string id = 1; // Identity ID of the access policy.
+}
+message UpdateAccessPolicyRequestParams {}
+message UpdateAccessPolicyRequestBody {
+  string name =
+      1; // Name of the access policy. Omit if it doesn't need to be updated.
+  repeated shared.Resource resource =
+      2; // Used to assign accessible locations to the access policy. Omit if it
+         // doesn't need to be updated.
+  string schedule_id =
+      3; // Identify ID of the schedule. Assign additional schedules. Omit this
+         // parameter if it doesn't need to be updated.
+}
+message UpdateAccessPolicyRequest {
+  UpdateAccessPolicyRequestPath path = 1;
+  UpdateAccessPolicyRequestParams params = 2;
+  UpdateAccessPolicyRequestBody body = 3;
+}
+
+// 5.4 Delete Access Policy
+message DeleteAccessPolicyRequestPath {}
+message DeleteAccessPolicyRequestParams {}
+message DeleteAccessPolicyRequestBody {
+  string id = 1; // Identity ID of the access policy.
+}
+message DeleteAccessPolicyRequest {
+  DeleteAccessPolicyRequestPath path = 1;
+  DeleteAccessPolicyRequestParams params = 2;
+  DeleteAccessPolicyRequestBody body = 3;
+}
+
+// 5.5 Fetch Access Policy
+message FetchAccessPolicyRequestPath {}
+message FetchAccessPolicyRequestParams {}
+message FetchAccessPolicyRequestBody {
+  string id = 1; // Identity ID of the access policy.
+}
+message FetchAccessPolicyRequest {
+  FetchAccessPolicyRequestPath path = 1;
+  FetchAccessPolicyRequestParams params = 2;
+  FetchAccessPolicyRequestBody body = 3;
+}
+
+// 5.6 Fetch All Access Policies
+message FetchAllAccessPoliciesRequestPath {}
+message FetchAllAccessPoliciesRequestParams {}
+message FetchAllAccessPoliciesRequestBody {}
+message FetchAllAccessPoliciesRequest {
+  FetchAllAccessPoliciesRequestPath path = 1;
+  FetchAllAccessPoliciesRequestParams params = 2;
+  FetchAllAccessPoliciesRequestBody body = 3;
+}
+
+// 5.8 Create Holiday Group
+message CreateHolidayGroupRequestPath {}
+message CreateHolidayGroupRequestParams {}
+message CreateHolidayGroupRequestBody {
+  string name = 1;        // Name of the holiday group.
+  string description = 2; // Description of the holiday group
+  repeated Holiday holidays =
+      3; // show a list of the holidays within the holiday group.
+}
+message CreateHolidayGroupRequest {
+  CreateHolidayGroupRequestPath path = 1;
+  CreateHolidayGroupRequestParams params = 2;
+  CreateHolidayGroupRequestBody body = 3;
+}
+
+// 5.9 Update Holiday Group
+message UpdateHolidayGroupRequestPath {
+  string id = 1; // Identity ID of the holiday group.
+}
+message UpdateHolidayGroupRequestParams {}
+message UpdateHolidayGroupRequestBody {
+  string name = 1;        // Name of the holiday group.
+  string description = 2; // Description of the holiday group
+  repeated Holiday holidays =
+      3; // show a list of the holidays within the holiday group.
+}
+message UpdateHolidayGroupRequest {
+  UpdateHolidayGroupRequestPath path = 1;
+  UpdateHolidayGroupRequestParams params = 2;
+  UpdateHolidayGroupRequestBody body = 3;
+}
+
+// 5.10 Delete Holiday Group
+message DeleteHolidayGroupRequestPath {
+  string id = 1; // Identity ID of the holiday group.
+}
+message DeleteHolidayGroupRequestParams {}
+message DeleteHolidayGroupRequestBody {}
+message DeleteHolidayGroupRequest {
+  DeleteHolidayGroupRequestPath path = 1;
+  DeleteHolidayGroupRequestParams params = 2;
+  DeleteHolidayGroupRequestBody body = 3;
+}
+
+// 5.11 Fetch Holiday Group
+message FetchHolidayGroupRequestPath {
+  string id = 1; // Identity ID of the holiday group.
+}
+message FetchHolidayGroupRequestParams {}
+message FetchHolidayGroupRequestBody {}
+message FetchHolidayGroupRequest {
+  FetchHolidayGroupRequestPath path = 1;
+  FetchHolidayGroupRequestParams params = 2;
+  FetchHolidayGroupRequestBody body = 3;
+}
+
+// 5.12 Fetch All Holiday Groups
+message FetchAllHolidayGroupsRequestPath {}
+message FetchAllHolidayGroupsRequestParams {}
+message FetchAllHolidayGroupsRequestBody {}
+message FetchAllHolidayGroupsRequest {
+  FetchAllHolidayGroupsRequestPath path = 1;
+  FetchAllHolidayGroupsRequestParams params = 2;
+  FetchAllHolidayGroupsRequestBody body = 3;
+}
+
+// 5.14 Create Schedule
+message CreateScheduleRequestPath {}
+message CreateScheduleRequestParams {}
+message CreateScheduleRequestBody {
+  string name = 1;
+  WeekSchedule week_schedule = 2;
+  string holiday_group_id = 3;
+  HolidaySchedule holiday_schedule = 4;
+}
+message CreateScheduleRequest {
+  CreateScheduleRequestPath path = 1;
+  CreateScheduleRequestParams params = 2;
+  CreateScheduleRequestBody body = 3;
+}
+
+// 5.15 Update Schedule
+message UpdateScheduleRequestPath {
+  string id = 1; // Identity ID of the schedule.
+}
+message UpdateScheduleRequestParams {}
+message UpdateScheduleRequestBody {
+  string name = 1;
+  WeekSchedule week_schedule = 2;
+  string holiday_group_id = 3;
+  HolidaySchedule holiday_schedule = 4;
+}
+message UpdateScheduleRequest {
+  UpdateScheduleRequestPath path = 1;
+  UpdateScheduleRequestParams params = 2;
+  UpdateScheduleRequestBody body = 3;
+}
+
+// 5.16 Fetch Schedule
+message FetchScheduleRequestPath {
+  string id = 1; // Identity ID of the schedule.
+}
+message FetchScheduleRequestParams {}
+message FetchScheduleRequestBody {}
+message FetchScheduleRequest {
+  FetchScheduleRequestPath path = 1;
+  FetchScheduleRequestParams params = 2;
+  FetchScheduleRequestBody body = 3;
+}
+
+// 5.17 Fetch All Schedules
+message FetchAllSchedulesRequestPath {}
+message FetchAllSchedulesRequestParams {}
+message FetchAllSchedulesRequestBody {}
+message FetchAllSchedulesRequest {
+  FetchAllSchedulesRequestPath path = 1;
+  FetchAllSchedulesRequestParams params = 2;
+  FetchAllSchedulesRequestBody body = 3;
+}
+
+// 5.18 Delete Schedule
+message DeleteScheduleRequestPath {
+  string id = 1; // Identity ID of the schedule.
+}
+message DeleteScheduleRequestParams {}
+message DeleteScheduleRequestBody {}
+message DeleteScheduleRequest {
+  DeleteScheduleRequestPath path = 1;
+  DeleteScheduleRequestParams params = 2;
+  DeleteScheduleRequestBody body = 3;
+}
+
+// -----------------
 
 message AccessPolicy {
   string id = 1;
   string name = 2;
-  repeated Resource resources = 3;
+  repeated shared.Resource resources = 3;
   string schedule_id = 4;
 }
-
-message Resource {
-  string id = 1;
-  string type = 2; // "door" or "door_group"
-}
-
-service AccessPolicyService {
-  rpc CreateAccessPolicy(CreateAccessPolicyRequest)
-      returns (AccessPolicyResponse);
-  rpc UpdateAccessPolicy(UpdateAccessPolicyRequest)
-      returns (AccessPolicyResponse);
-  rpc FetchAccessPolicy(FetchAccessPolicyRequest)
-      returns (AccessPolicyResponse);
-  rpc FetchAllAccessPolicies(FetchAllAccessPoliciesRequest)
-      returns (AccessPoliciesResponse);
-  rpc DeleteAccessPolicy(DeleteAccessPolicyRequest)
-      returns (AccessPolicyResponse);
-}
-
-message CreateAccessPolicyRequest {
-  string name = 1;
-  repeated Resource resources = 2;
-  string schedule_id = 3;
-}
-
-message UpdateAccessPolicyRequest {
-  string id = 1;
-  string name = 2;
-  repeated Resource resources = 3;
-  string schedule_id = 4;
-}
-
-message FetchAccessPolicyRequest { string id = 1; }
-
-message FetchAllAccessPoliciesRequest {
-  int32 page_num = 1;
-  int32 page_size = 2;
-}
-
-message DeleteAccessPolicyRequest { string id = 1; }
 
 message AccessPolicyResponse {
   string code = 1;
@@ -59,11 +353,88 @@ message AccessPoliciesResponse {
   string code = 1;
   string msg = 2;
   repeated AccessPolicy data = 3;
-  Pagination pagination = 4;
 }
 
-message Pagination {
-  int32 page_num = 1;
-  int32 page_size = 2;
-  int32 total = 3;
+message Schedule {
+  string id = 1;       // Schedule ID
+  string name = 2;     // Name of the schedule
+  bool is_default = 3; // Whether system default
+  string type = 4;     // Type of the schedule (e.g., access)
+  access_policy.WeekSchedule weekly =
+      5; // Customizable daily scheduling, or every day if empty.
+  repeated HolidaySchedule holiday_schedule =
+      6;                       // Specify the accessible period during holidays.
+  string holiday_group_id = 7; // Identity ID of the holiday group
+}
+
+message ScheduleResponse {
+  string code = 1;
+  Schedule data = 2;
+  string msg = 3;
+}
+
+message SchedulesResponse {
+  string code = 1;
+  repeated Schedule data = 2;
+  string msg = 3;
+}
+
+message Holiday {
+  string description = 1; // Description of the holiday.
+  string id = 2;          // Identity ID of the holiday.
+  string name = 3;        // Name of the holiday.
+  bool repeat = 4;        // Indicate whether the holiday repeats annually.
+  string start_time = 6;  // Start time of the holiday, provided in UTC format
+                          // according to RFC3339.
+  string end_time = 7;    // End time of the holiday, provided in UTC format
+                          // according to RFC3339.
+}
+
+message HolidaySchedule {
+  int64 start_time = 1;
+  int64 end_time = 2;
+}
+
+message HolidayGroup {
+  string id = 1;   // Identity ID of the holiday group
+  string name = 2; // Name of the holiday group.
+  bool is_default =
+      3; // Indicate whether the holiday group is the system default.
+  string description = 4; // Description of the holiday group.
+  repeated access_policy.Holiday holidays =
+      5; // Show a list of the holidays within the holiday group.
+}
+
+message HolidayGroupResponse {
+  string code = 1;
+  string msg = 2;
+  HolidayGroup data = 3;
+}
+
+message HolidayGroupSummary {
+  string id = 1;          // Identity ID of the holiday group
+  string name = 2;        // Name of the holiday group.
+  string description = 3; // Description of the holiday group.
+  int32 count = 4;        // Total number of holidays.
+}
+
+message HolidayGroupSummaryResponse {
+  string code = 1;
+  repeated HolidayGroupSummary data = 2;
+  string msg = 3;
+}
+
+message DaySchedule {
+  string start_time = 1; // Start time of the access period
+  string end_time = 2;   // End time of the access period
+}
+
+message WeekSchedule {
+  repeated DaySchedule sunday = 1;    // Schedule for Sunday
+  repeated DaySchedule monday = 2;    // Schedule for Monday
+  repeated DaySchedule tuesday = 3;   // Schedule for Tuesday
+  repeated DaySchedule wednesday = 4; // Schedule for Wednesday
+  repeated DaySchedule thursday = 5;  // Schedule for Thursday
+  repeated DaySchedule friday = 6;    // Schedule for Friday
+  repeated DaySchedule saturday = 7;  // Schedule for Saturday
 }

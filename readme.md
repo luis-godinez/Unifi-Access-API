@@ -61,5 +61,5 @@ If you'd like to contribute to this project due to any API changes or issues, pl
 
 ```
 go install github.com/pseudomuto/protoc-gen-doc/cmd/protoc-gen-doc@latest
-protoc --doc_out=./docs --doc_opt=html,index.html proto/*.proto
+npm run generate:html
 ```

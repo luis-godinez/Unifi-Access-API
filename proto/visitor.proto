@@ -2,142 +2,229 @@ syntax = "proto3";
 
 package visitor;
 
-message Visitor {
-  string id = 1;
-  string first_name = 2;
-  string last_name = 3;
-  string mobile_phone = 4;
-  string email = 5;
-  string visitor_company = 6;
-  int64 start_time = 7;
-  int64 end_time = 8;
-  string visit_reason = 9;
-  repeated Resource resources = 10;
-  WeekSchedule week_schedule = 11;
-  repeated NFC_Card nfc_cards = 12;
-  PIN_Code pin_code = 13;
-  Status status = 14;
-  string inviter_id = 15;
-  string inviter_name = 16;
-  string remarks = 17;
-  string schedule_id = 18; // Added field for schedule ID
-}
+import "google/api/annotations.proto";
 
-message Resource {
-  string id = 1;
-  string name = 2;
-  string type = 3; // "door" or "door_group"
-}
-
-message WeekSchedule {
-  repeated DaySchedule monday = 1;
-  repeated DaySchedule tuesday = 2;
-  repeated DaySchedule wednesday = 3;
-  repeated DaySchedule thursday = 4;
-  repeated DaySchedule friday = 5;
-  repeated DaySchedule saturday = 6;
-  repeated DaySchedule sunday = 7;
-}
-
-message DaySchedule {
-  string start_time = 1;
-  string end_time = 2;
-}
-
-message NFC_Card {
-  string id = 1;
-  string token = 2;
-  string type = 3; // Added field for card type
-}
-
-message PIN_Code { string token = 1; }
-
-enum Status {
-  UPCOMING = 0;
-  VISITED = 1;
-  VISITING = 2;
-  CANCELLED = 3;
-  NO_VISIT = 4;
-  ACTIVE = 5;
-}
+import "shared.proto";
+import "access_policy.proto";
 
 service VisitorService {
-  rpc CreateVisitor(CreateVisitorRequest) returns (VisitorResponse);
-  rpc UpdateVisitor(UpdateVisitorRequest) returns (VisitorResponse);
-  rpc FetchVisitor(FetchVisitorRequest) returns (VisitorResponse);
-  rpc FetchAllVisitors(FetchAllVisitorsRequest) returns (VisitorsResponse);
-  rpc AssignNFC_CardToVisitor(AssignNFC_CardRequest) returns (VisitorResponse);
-  rpc UnassignNFC_CardFromVisitor(UnassignNFC_CardRequest)
-      returns (VisitorResponse);
-  rpc AssignPINCodeToVisitor(AssignPINCodeRequest) returns (VisitorResponse);
-  rpc UnassignPINCodeFromVisitor(UnassignPINCodeRequest)
-      returns (VisitorResponse);
-  rpc DeleteVisitor(DeleteVisitorRequest) returns (VisitorResponse);
+  // Create a new visitor
+  rpc CreateVisitor(CreateVisitorRequest) returns (VisitorResponse) {
+    option (google.api.http) = {
+      post : "/api/v1/developer/visitors"
+      body : "*"
+    };
+  }
+
+  // Fetch visitor details by ID
+  rpc FetchVisitor(FetchVisitorRequest) returns (VisitorResponse) {
+    option (google.api.http) = {
+      get : "/api/v1/developer/visitors/{id}"
+    };
+  }
+
+  // Fetch all visitors
+  rpc FetchAllVisitors(FetchAllVisitorsRequest) returns (VisitorsResponse) {
+    option (google.api.http) = {
+      get : "/api/v1/developer/visitors"
+    };
+  }
+
+  // Update a visitor by ID
+  rpc UpdateVisitor(UpdateVisitorRequest) returns (VisitorResponse) {
+    option (google.api.http) = {
+      put : "/api/v1/developer/visitors/{id}"
+      body : "*"
+    };
+  }
+
+  // Delete a visitor by ID
+  rpc DeleteVisitor(DeleteVisitorRequest) returns (VisitorResponse) {
+    option (google.api.http) = {
+      delete : "/api/v1/developer/visitors/{id}"
+      body : "*"
+    };
+  }
+
+  // Assign Visitor NFC Card
+  rpc AssignVisitorNfcCard(AssignVisitorNfcCardRequest)
+      returns (shared.StatusCodeResponse) {
+    option (google.api.http) = {
+      put : "/api/v1/developer/visitors/{id}/nfc_cards"
+      body : "*"
+    };
+  }
+  // Unassign Visitor NFC Card
+  rpc UnassignVisitorNfcCard(UnassignVisitorNfcCardRequest)
+      returns (shared.StatusCodeResponse) {
+    option (google.api.http) = {
+      put : " /api/v1/developer/visitors/{id}/nfc_cards/delete"
+      body : "*"
+    };
+  }
+  // Assign Visitor Pin Code
+  rpc AssignVisitorPinCode(AssignVisitorPinCodeRequest)
+      returns (shared.StatusCodeResponse) {
+    option (google.api.http) = {
+      put : " /api/v1/developer/visitors/{id}/pin_codes"
+      body : "*"
+    };
+  }
+  // Unassisgn Visitor Pin Code
+  rpc UnassignVisitorPinCode(UnassignVisitorPinCodeRequest)
+      returns (shared.StatusCodeResponse) {
+    option (google.api.http) = {
+      delete : "/api/v1/developer/visitors/{id}/pin_codes"
+    };
+  }
 }
 
+// 4.2 Create Visitor
+message CreateVisitorRequestPath {}
+message CreateVisitorRequestParams {}
+message CreateVisitorRequestBody {
+  string first_name = 1;           // First name of the visitors
+  string last_name = 2;            // Last name of the visitor
+  string remarks = 17;             // Remarks about the visitor
+  string mobile_phone = 4;         // Mobile phone number of the visitor
+  string email = 3;                // Email address of the visitor
+  string visitor_company = 5;      // Company name of the visitor
+  int64 start_time = 6;            // Start time of the visit, ex: 1688546460
+  int64 end_time = 7;              // End time of the visit, ex: 1688572799
+  string visit_reason = 8;         // Visit reason, see VisitReason enum.
+  repeated shared.Resource resources = 9; // Assign available locations to the visitor.
+  access_policy.WeekSchedule week_schedule =
+      10; // The customizable scheduling strategy for each day from Sunday to
+          // Saturday. If not specified, it means access is allowed every day
+}
 message CreateVisitorRequest {
-  string first_name = 1;
-  string last_name = 2;
-  string mobile_phone = 3;
-  string email = 4;
-  string visitor_company = 5;
-  int64 start_time = 6;
-  int64 end_time = 7;
-  string visit_reason = 8;
-  repeated Resource resources = 9;
-  WeekSchedule week_schedule = 10;
-  string schedule_id = 11; // Added field for schedule ID
+  CreateVisitorRequestPath path = 1;
+  CreateVisitorRequestParams params = 2;
+  CreateVisitorRequestBody body = 3;
 }
 
-message UpdateVisitorRequest {
-  string id = 1;
-  string first_name = 2;
-  string last_name = 3;
-  string mobile_phone = 4;
-  string email = 5;
-  string visitor_company = 6;
-  int64 start_time = 7;
-  int64 end_time = 8;
-  string visit_reason = 9;
-  repeated Resource resources = 10;
-  WeekSchedule week_schedule = 11;
-  Status status = 12;
-  string schedule_id = 13; // Added field for schedule ID
+// 4.3 Fetch Visitor
+message FetchVisitorRequestPath {
+  string id = 1; // Identify ID of the visitor
+}
+message FetchVisitorRequestParams {}
+message FetchVisitorRequestBody {}
+message FetchVisitorRequest {
+  FetchVisitorRequestPath path = 1;
+  FetchVisitorRequestParams params = 2;
+  FetchVisitorRequestBody body = 3;
 }
 
-message FetchVisitorRequest { string id = 1; }
-
+// 4.4 Fetch All Visitors
+message FetchAllVisitorsRequestPath {}
+message FetchAllVisitorsRequestParams {
+  Status status = 1;
+  string keyword = 2;
+  string page_num = 3;
+  string page_size = 4;
+  repeated string expand = 5; // Determine whether to return associated objects,
+                              // reference the ExpandObjects enum.
+}
+message FetchAllVisitorsRequestBody {}
 message FetchAllVisitorsRequest {
-  int32 page_num = 1;
-  int32 page_size = 2;
-  string keyword = 3;
+  FetchAllVisitorsRequestPath path = 1;
+  FetchAllVisitorsRequestParams params = 2;
+  FetchAllVisitorsRequestBody body = 3;
 }
 
-message AssignNFC_CardRequest {
-  string id = 1;
-  string token = 2;
-  bool force_add = 3;
+// 4.5 Update Visitor
+message UpdateVisitorRequestPath {}
+message UpdateVisitorRequestParams {}
+message UpdateVisitorRequestBody {
+  string first_name = 1;      // First name of the visitor.
+  string last_name = 2;       // Last name of the visitor.
+  string remarks = 3;         // Remarks about the visitor.
+  string mobile_phone = 4;    // Mobile phone number of the visitor.
+  string email = 5;           // Email address of the visitor.
+  string visitor_company = 6; // Company name of the visitor.
+  int32 start_time = 7;       // Start time of the visit.
+  int32 end_time = 8;         // End time of the visit,
+  string visit_reason = 9;    // Visit reason, see VisitReason enum.
+  repeated shared.Resource resources = 10;
+  access_policy.WeekSchedule week_schedule = 11;
+}
+message UpdateVisitorRequest {
+  UpdateVisitorRequestPath path = 1;
+  UpdateVisitorRequestParams params = 2;
+  UpdateVisitorRequestBody body = 3;
 }
 
-message UnassignNFC_CardRequest {
-  string id = 1;
-  string token = 2;
+// 4.6 Delete Visitor
+message DeleteVisitorRequestPath { string id = 1; }
+message DeleteVisitorRequestParams {
+  bool is_force = 1; // If is_force is passed, physicall delete this visitor;
+                     // otherwise, update to canceled status.
 }
-
-message AssignPINCodeRequest {
-  string id = 1;
-  string token = 2;
-}
-
-message UnassignPINCodeRequest {
-  string id = 1;
-  string token = 2;
-}
-
+message DeleteVisitorRequestBody {}
 message DeleteVisitorRequest {
-  string id = 1;
-  bool is_force = 2;
+  DeleteVisitorRequestPath path = 1;
+  DeleteVisitorRequestParams params = 2;
+  DeleteVisitorRequestBody body = 3;
 }
+
+// 4.7 Assign NFC Card to Visitor
+message AssignVisitorNfcCardRequestPath {
+  string id = 1; // Identity ID of the visitor. Get it from the API,
+                 // /api/v1/developer/visitors
+}
+message AssignVisitorNfcCardRequestParams {}
+message AssignVisitorNfcCardRequestBody {}
+message AssignVisitorNfcCardRequest {
+  AssignVisitorNfcCardRequestPath path = 1;
+  AssignVisitorNfcCardRequestParams params = 2;
+  AssignVisitorNfcCardRequestBody body = 3;
+}
+
+// 4.8 Unassign NFC Card from Visitor
+message UnassignVisitorNfcCardRequestPath {
+  string id = 1; // Identity ID of the visitor. Get it from the API,
+                 // /api/v1/developer/visitors
+}
+message UnassignVisitorNfcCardRequestParams {}
+message UnassignVisitorNfcCardRequestBody {
+  string token = 1; // Token of the NFC Card.
+}
+message UnassignVisitorNfcCardRequest {
+  UnassignVisitorNfcCardRequestPath path = 1;
+  UnassignVisitorNfcCardRequestParams params = 2;
+  UnassignVisitorNfcCardRequestBody body = 3;
+}
+
+// 4.9 Assign PIN Code to Visitor
+message AssignVisitorPinCodeRequestPath {
+  string id = 1; // Identity ID of the visitor. Get it from the API,
+                 // /api/v1/developer/visitors
+}
+message AssignVisitorPinCodeRequestParams {}
+message AssignVisitorPinCodeRequestBody {
+  string pin_code = 1; // Generate a PIN code for the visitor to unlock doors.
+                       // Get it from the API, /api/v1/developer/pin_codes
+}
+message AssignVisitorPinCodeRequest {
+  AssignVisitorPinCodeRequestPath path = 1;
+  AssignVisitorPinCodeRequestParams params = 2;
+  AssignVisitorPinCodeRequestBody body = 3;
+}
+
+// 4.10 Unassign PIN Code from Visitor
+message UnassignVisitorPinCodeRequestPath {
+  string id = 1; // Identity ID of the visitor. Get it from the API,
+                 // /api/v1/developer/visitors
+}
+message UnassignVisitorPinCodeRequestParams {}
+message UnassignVisitorPinCodeRequestBody {}
+message UnassignVisitorPinCodeRequest {
+  UnassignVisitorPinCodeRequestPath path = 1;
+  UnassignVisitorPinCodeRequestParams params = 2;
+  UnassignVisitorPinCodeRequestBody body = 3;
+}
+
+// --------------
 
 message VisitorResponse {
   string code = 1;
@@ -149,11 +236,54 @@ message VisitorsResponse {
   string code = 1;
   string msg = 2;
   repeated Visitor data = 3;
-  Pagination pagination = 4;
 }
 
-message Pagination {
-  int32 page_num = 1;
-  int32 page_size = 2;
-  int32 total = 3;
+// -----------------
+
+message Visitor {
+  string id = 1;              // Unique ID of the visitor
+  string first_name = 2;      // First name of the visitor
+  string last_name = 3;       // Last name of the visitor
+  Status status = 15;         // Status of the visit
+  string inviter_id = 16;     // ID of the inviter
+  string inviter_name = 17;   // Name of the inviter
+  string mobile_phone = 5;    // Contact phone number of the visitor
+  string remarks = 18;        // Remarks about the visitor
+  string email = 4;           // Email address of the visitor
+  string visitor_company = 6; // Company of the visitor
+  string visit_reason = 9;    // Visit reason (e.g., Interview, Business)
+  int64 start_time = 7;       // Start time of the visit
+  int64 end_time = 8;         // End time of the visit
+  repeated shared.NFC_Card nfc_cards =
+      10;                        // NFC cards associated with the visitor
+  shared.PIN_Code pin_code = 11; // PIN code associated with the visitor
+  string schedule_id = 12;       // Schedule ID associated with the visit
+  access_policy.Schedule schedule = 13;        // Schedule details. One-time visit if missing.
+  repeated shared.Resource resources = 14; // Locations that the visitor can access
+}
+
+enum Status {
+  UNKNOWN = 0;   // Note: This is a placeholder, does not exist on API.
+  UPCOMING = 1;  // Upcoming visit
+  VISITED = 2;   // Completed visit
+  VISITING = 3;  // Currently visiting
+  CANCELLED = 4; // Cancelled visit
+  NO_VISIT = 5;  // No visit occurred
+  ACTIVE = 6;    // Active visit
+}
+
+enum VisitReason {
+  Interview = 0;
+  Business = 1;
+  Cooperation = 2;
+  Others = 3;
+}
+
+enum ExpandObjects {
+  none = 0;
+  access_policy = 1;
+  resource = 2;
+  schedule = 3;
+  nfc_card = 4;
+  pin_code = 5;
 }

@@ -2,18 +2,33 @@ syntax = "proto3";
 
 package device;
 
+import "google/api/annotations.proto";
+
+service DeviceService {
+  // 8.1 Fetch Devices
+  rpc FetchDevices(FetchDevicesRequest) returns (DevicesResponse) {
+    option (google.api.http) = {
+      get : "/api/v1/developer/devices"
+    };
+  }
+}
+
+// 8.1 Fetch Devices
+message FetchDevicesRequestPath {}
+message FetchDevicesRequestParams {}
+message FetchDevicesRequestBody {}
+message FetchDevicesRequest {
+  FetchDevicesRequestPath path = 1;
+  FetchDevicesRequestParams params = 2;
+  FetchDevicesRequestBody body = 3;
+}
+
 message Device {
   string id = 1;
   string name = 2;
   string type = 3;
   string full_name = 4;
 }
-
-service DeviceService {
-  rpc FetchDevices(FetchDevicesRequest) returns (DevicesResponse);
-}
-
-message FetchDevicesRequest {}
 
 message DevicesResponse {
   string code = 1;
