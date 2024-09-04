@@ -20,7 +20,7 @@ service APIServerService {
   }
 }
 
-// 12.1 Upload HTTPS Certificate
+// 12.1 - POST - Upload HTTPS Certificate
 message UploadCertificateRequestPath {}
 message UploadCertificateRequestParams {}
 message UploadCertificateRequestBody {
@@ -33,7 +33,7 @@ message UploadCertificateRequest {
   UploadCertificateRequestBody body = 3;
 }
 
-// 12.2 Delete HTTPS Certificate
+// 12.2 - DELETE - Delete HTTPS Certificate
 message DeleteCertificateRequestPath {}
 message DeleteCertificateRequestParams {}
 message DeleteCertificateRequestBody {}

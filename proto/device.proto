@@ -13,7 +13,7 @@ service DeviceService {
   }
 }
 
-// 8.1 Fetch Devices
+// 8.1 - GET - Fetch Devices
 message FetchDevicesRequestPath {}
 message FetchDevicesRequestParams {}
 message FetchDevicesRequestBody {}
@@ -22,6 +22,8 @@ message FetchDevicesRequest {
   FetchDevicesRequestParams params = 2;
   FetchDevicesRequestBody body = 3;
 }
+
+// --------------
 
 message Device {
   string id = 1;

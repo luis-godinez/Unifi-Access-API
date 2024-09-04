@@ -96,9 +96,8 @@ service SpaceService {
     };
   }
 }
-// ----------------
 
-// 7.1 Fetch Door Group Topology
+// 7.1 - GET - Fetch Door Group Topology
 message FetchDoorGroupTopologyRequestPath {}
 message FetchDoorGroupTopologyRequestParams {}
 message FetchDoorGroupTopologyRequestBody {
@@ -112,7 +111,7 @@ message FetchDoorGroupTopologyRequest {
   FetchDoorGroupTopologyRequestBody body = 3;
 }
 
-// 7.2 Create Door Group
+// 7.2 - POST - Create Door Group
 message CreateDoorGroupRequestPath {}
 message CreateDoorGroupRequestParams {}
 message CreateDoorGroupRequestBody {
@@ -126,7 +125,7 @@ message CreateDoorGroupRequest {
   CreateDoorGroupRequestBody body = 3;
 }
 
-// 7.3 Fetch Door Group
+// 7.3 - GET - Fetch Door Group
 message FetchDoorGroupRequestPath { string id = 1; }
 message FetchDoorGroupRequestParams {}
 message FetchDoorGroupRequestBody {}
@@ -136,7 +135,7 @@ message FetchDoorGroupRequest {
   FetchDoorGroupRequestBody body = 3;
 }
 
-// 7.4 Update Door Group
+// 7.4 - PUT - Update Door Group
 message UpdateDoorGroupRequestPath { string id = 1; }
 message UpdateDoorGroupRequestParams {}
 message UpdateDoorGroupRequestBody {
@@ -149,7 +148,7 @@ message UpdateDoorGroupRequest {
   UpdateDoorGroupRequestBody body = 3;
 }
 
-// 7.5 Fetch All Door Groups
+// 7.5 - GET - Fetch All Door Groups
 message FetchAllDoorGroupsRequestPath {}
 message FetchAllDoorGroupsRequestParams {}
 message FetchAllDoorGroupsRequestBody {}
@@ -159,7 +158,7 @@ message FetchAllDoorGroupsRequest {
   FetchAllDoorGroupsRequestBody body = 3;
 }
 
-// 7.6 Delete Door Group
+// 7.6 - DELETE - Delete Door Group
 message DeleteDoorGroupRequestPath { string id = 1; }
 message DeleteDoorGroupRequestParams {}
 message DeleteDoorGroupRequestBody {}
@@ -169,7 +168,7 @@ message DeleteDoorGroupRequest {
   DeleteDoorGroupRequestBody body = 3;
 }
 
-// 7.7 Fetch Door
+// 7.7 GET - Fetch Door
 message FetchDoorRequestPath { string id = 1; }
 message FetchDoorRequestParams {}
 message FetchDoorRequestBody {}
@@ -179,7 +178,7 @@ message FetchDoorRequest {
   FetchDoorRequestBody body = 3;
 }
 
-// 7.8 Fetch All Doors
+// 7.8 - GET - Fetch All Doors
 message FetchAllDoorsRequestPath {}
 message FetchAllDoorsRequestParams {}
 message FetchAllDoorsRequestBody {}
@@ -189,7 +188,7 @@ message FetchAllDoorsRequest {
   FetchAllDoorsRequestBody body = 3;
 }
 
-// 7.9 Remote Door Unlocking
+// 7.9 - PUT - Remote Door Unlocking
 message RemoteDoorUnlockingRequestPath { string id = 1; }
 message RemoteDoorUnlockingRequestParams {}
 message RemoteDoorUnlockingRequestBody {}
@@ -199,7 +198,7 @@ message RemoteDoorUnlockingRequest {
   RemoteDoorUnlockingRequestBody body = 3;
 }
 
-// 7.10 Set Temporary Door Locking Rule
+// 7.10 - PUT - Set Temporary Door Locking Rule
 message SetTemporaryDoorLockingRuleRequestPath { string id = 1; }
 message SetTemporaryDoorLockingRuleRequestParams {}
 message SetTemporaryDoorLockingRuleRequestBody {
@@ -220,7 +219,7 @@ message SetTemporaryDoorLockingRuleRequest {
   SetTemporaryDoorLockingRuleRequestBody body = 3;
 }
 
-// 7.11 Fetch Door Locking Rule
+// 7.11 - GET - Fetch Door Locking Rule
 message FetchDoorLockingRuleRequestPath { string id = 1; }
 message FetchDoorLockingRuleRequestParams {}
 message FetchDoorLockingRuleRequestBody {
@@ -240,7 +239,7 @@ message FetchDoorLockingRuleRequest {
   FetchDoorLockingRuleRequestBody body = 3;
 }
 
-// 7.12 Set Door Emergency Status
+// 7.12 - PUT - Set Door Emergency Status
 message SetDoorEmergencyStatusRequestPath {}
 message SetDoorEmergencyStatusRequestParams {}
 message SetDoorEmergencyStatusRequestBody {
@@ -253,7 +252,7 @@ message SetDoorEmergencyStatusRequest {
   SetDoorEmergencyStatusRequestBody body = 3;
 }
 
-// 7.13 Fetch Door Emergency Status
+// 7.13 - GET - Fetch Door Emergency Status
 message FetchDoorEmergencyStatusRequestPath {}
 message FetchDoorEmergencyStatusRequestParams {}
 message FetchDoorEmergencyStatusRequestBody {
@@ -266,7 +265,7 @@ message FetchDoorEmergencyStatusRequest {
   FetchDoorEmergencyStatusRequestBody body = 3;
 }
 
-// ------------
+// --------------
 
 message ResourceTopology {
   string id = 1;                   // Identity ID of the floor

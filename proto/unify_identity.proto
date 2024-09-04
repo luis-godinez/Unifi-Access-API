@@ -58,9 +58,7 @@ service UnifyIdentityService {
   }
 }
 
-// ----------------------
-
-// 10.1 Send Unifi Identity Invitations
+// 10.1 - POST - Send Unifi Identity Invitations
 message SendUnifiIdentityInvitationsRequestPath {}
 message SendUnifiIdentityInvitationsRequestParams {}
 message SendUnifiIdentityInvitationsRequestBody {
@@ -72,10 +70,10 @@ message SendUnifiIdentityInvitationsRequest {
   SendUnifiIdentityInvitationsRequestBody body = 3;
 }
 
-// 10.2 Fetch Available Resources
+// 10.2 - GET - Fetch Available Resources
 message FetchAvailableResourcesRequestPath {}
 message FetchAvailableResourcesRequestParams {
-  // g Display the type of resources; show all when left blank. enum
+  // Display the type of resources; show all when left blank. enum
   // resource_type {ev_station,vpn,wifi} ex: resource_type=ev_station,wifi,vpn
   string resource_type = 1;
 }
@@ -86,7 +84,7 @@ message FetchAvailableResourcesRequest {
   FetchAvailableResourcesRequestBody body = 3;
 }
 
-// 10.3 Assign Resources to Users
+// 10.3 - POST - Assign Resources to Users
 message AssignUserResourcesRequestPath {
   string id = 1; // Identity ID of the user.
 }
@@ -101,7 +99,7 @@ message AssignUserResourcesRequest {
   AssignUserResourcesRequestBody body = 3;
 }
 
-// 10.4 Fetch Resources Assigned to Users
+// 10.4 - GET - Fetch Resources Assigned to Users
 message FetchUserResourcesRequestPath { string id = 1; }
 message FetchUserResourcesRequestParams {}
 message FetchUserResourcesRequestBody {}
@@ -111,7 +109,7 @@ message FetchUserResourcesRequest {
   FetchUserResourcesRequestBody body = 3;
 }
 
-// 10.5 Assign Resources to User Groups
+// 10.5 - POST - Assign Resources to User Groups
 message AssignUserGroupResourcesRequestPath { string id = 1; }
 message AssignUserGroupResourcesRequestParams {}
 message AssignUserGroupResourcesRequestBody {
@@ -124,7 +122,7 @@ message AssignUserGroupResourcesRequest {
   AssignUserGroupResourcesRequestBody body = 3;
 }
 
-// 10.6 Fetch the Resources Assigned to User Groups
+// 10.6 - GET - Fetch the Resources Assigned to User Groups
 
 message FetchUserGroupResourcesRequestPath { string id = 1; }
 message FetchUserGroupResourcesRequestParams {}
@@ -135,7 +133,7 @@ message FetchUserGroupResourcesRequest {
   FetchUserGroupResourcesRequestBody body = 3;
 }
 
-// -------------
+// --------------
 
 message Invitation {
   string user_id = 1;

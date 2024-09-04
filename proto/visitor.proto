@@ -79,7 +79,7 @@ service VisitorService {
   }
 }
 
-// 4.2 Create Visitor
+// 4.2 - POST - Create Visitor
 message CreateVisitorRequestPath {}
 message CreateVisitorRequestParams {}
 message CreateVisitorRequestBody {
@@ -92,11 +92,11 @@ message CreateVisitorRequestBody {
   int64 start_time = 6;       // Start time of the visit, ex: 1688546460
   int64 end_time = 7;         // End time of the visit, ex: 1688572799
   string visit_reason = 8;    // Visit reason, see VisitReason enum.
-  repeated shared.Resource resources =
-      9; // Assign available locations to the visitor.
-  access_policy.WeekSchedule week_schedule =
-      10; // The customizable scheduling strategy for each day from Sunday to
-          // Saturday. If not specified, it means access is allowed every day
+  repeated shared.Resource resources = 9;
+  // Assign available locations to the visitor.
+  access_policy.WeekSchedule week_schedule = 10;
+  // The customizable scheduling strategy for each day from Sunday to Saturday.
+  // If not specified, it means access is allowed every day
 }
 message CreateVisitorRequest {
   CreateVisitorRequestPath path = 1;
@@ -104,7 +104,7 @@ message CreateVisitorRequest {
   CreateVisitorRequestBody body = 3;
 }
 
-// 4.3 Fetch Visitor
+// 4.3 - GET - Fetch Visitor
 message FetchVisitorRequestPath {
   string id = 1; // Identify ID of the visitor
 }
@@ -116,7 +116,7 @@ message FetchVisitorRequest {
   FetchVisitorRequestBody body = 3;
 }
 
-// 4.4 Fetch All Visitors
+// 4.4 - GET - Fetch All Visitors
 message FetchAllVisitorsRequestPath {}
 message FetchAllVisitorsRequestParams {
   Status status = 1;
@@ -133,7 +133,7 @@ message FetchAllVisitorsRequest {
   FetchAllVisitorsRequestBody body = 3;
 }
 
-// 4.5 Update Visitor
+// 4.5 - PUT - Update Visitor
 message UpdateVisitorRequestPath {}
 message UpdateVisitorRequestParams {}
 message UpdateVisitorRequestBody {
@@ -155,11 +155,12 @@ message UpdateVisitorRequest {
   UpdateVisitorRequestBody body = 3;
 }
 
-// 4.6 Delete Visitor
+// 4.6 - DELETE - Delete Visitor
 message DeleteVisitorRequestPath { string id = 1; }
 message DeleteVisitorRequestParams {
-  bool is_force = 1; // If is_force is passed, physicall delete this visitor;
-                     // otherwise, update to canceled status.
+  bool is_force = 1;
+  // If is_force is passed, physicall delete this visitor; otherwise, update to
+  // canceled status.
 }
 message DeleteVisitorRequestBody {}
 message DeleteVisitorRequest {
@@ -168,10 +169,11 @@ message DeleteVisitorRequest {
   DeleteVisitorRequestBody body = 3;
 }
 
-// 4.7 Assign NFC Card to Visitor
+// 4.7 - PUT - Assign NFC Card to Visitor
 message AssignVisitorNfcCardRequestPath {
-  string id = 1; // Identity ID of the visitor. Get it from the API,
-                 // /api/v1/developer/visitors
+  string id = 1;
+  // Identity ID of the visitor.
+  // Get it from the API, /api/v1/developer/visitors
 }
 message AssignVisitorNfcCardRequestParams {}
 message AssignVisitorNfcCardRequestBody {}
@@ -181,10 +183,11 @@ message AssignVisitorNfcCardRequest {
   AssignVisitorNfcCardRequestBody body = 3;
 }
 
-// 4.8 Unassign NFC Card from Visitor
+// 4.8 - PUT - Unassign NFC Card from Visitor
 message UnassignVisitorNfcCardRequestPath {
-  string id = 1; // Identity ID of the visitor. Get it from the API,
-                 // /api/v1/developer/visitors
+  string id = 1;
+  // Identity ID of the visitor.
+  // Get it from the API, /api/v1/developer/visitors
 }
 message UnassignVisitorNfcCardRequestParams {}
 message UnassignVisitorNfcCardRequestBody {
@@ -196,15 +199,17 @@ message UnassignVisitorNfcCardRequest {
   UnassignVisitorNfcCardRequestBody body = 3;
 }
 
-// 4.9 Assign PIN Code to Visitor
+// 4.9 - PUT - Assign PIN Code to Visitor
 message AssignVisitorPinCodeRequestPath {
-  string id = 1; // Identity ID of the visitor. Get it from the API,
-                 // /api/v1/developer/visitors
+  string id = 1;
+  // Identity ID of the visitor.
+  // Get it from the API, /api/v1/developer/visitors
 }
 message AssignVisitorPinCodeRequestParams {}
 message AssignVisitorPinCodeRequestBody {
-  string pin_code = 1; // Generate a PIN code for the visitor to unlock doors.
-                       // Get it from the API, /api/v1/developer/pin_codes
+  string pin_code = 1;
+  // Generate a PIN code for the visitor to unlock doors.
+  // Get it from the API, /api/v1/developer/pin_codes
 }
 message AssignVisitorPinCodeRequest {
   AssignVisitorPinCodeRequestPath path = 1;
@@ -212,10 +217,11 @@ message AssignVisitorPinCodeRequest {
   AssignVisitorPinCodeRequestBody body = 3;
 }
 
-// 4.10 Unassign PIN Code from Visitor
+// 4.10 - DELETE - Unassign PIN Code from Visitor
 message UnassignVisitorPinCodeRequestPath {
-  string id = 1; // Identity ID of the visitor. Get it from the API,
-                 // /api/v1/developer/visitors
+  string id = 1;
+  // Identity ID of the visitor.
+  // Get it from the API, /api/v1/developer/visitors
 }
 message UnassignVisitorPinCodeRequestParams {}
 message UnassignVisitorPinCodeRequestBody {}
@@ -239,7 +245,7 @@ message VisitorsResponse {
   repeated Visitor data = 3;
 }
 
-// -----------------
+// --------------
 
 message Visitor {
   string id = 1;              // Unique ID of the visitor

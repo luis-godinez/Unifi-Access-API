@@ -129,9 +129,7 @@ service AccessPolicyService {
   }
 }
 
-/////
-
-// 5.2 Create Access Policy
+// 5.2 - POST - Create Access Policy
 message CreateAccessPolicyRequestPath {}
 message CreateAccessPolicyRequestParams {}
 message CreateAccessPolicyRequestBody {
@@ -147,7 +145,7 @@ message CreateAccessPolicyRequest {
   CreateAccessPolicyRequestBody body = 3;
 }
 
-// 5.3 Update Access Policy
+// 5.3 - PUT - Update Access Policy
 message UpdateAccessPolicyRequestPath {
   string id = 1; // Identity ID of the access policy.
 }
@@ -168,31 +166,31 @@ message UpdateAccessPolicyRequest {
   UpdateAccessPolicyRequestBody body = 3;
 }
 
-// 5.4 Delete Access Policy
-message DeleteAccessPolicyRequestPath {}
-message DeleteAccessPolicyRequestParams {}
-message DeleteAccessPolicyRequestBody {
+// 5.4 - DELETE - Delete Access Policy
+message DeleteAccessPolicyRequestPath {
   string id = 1; // Identity ID of the access policy.
 }
+message DeleteAccessPolicyRequestParams {}
+message DeleteAccessPolicyRequestBody {}
 message DeleteAccessPolicyRequest {
   DeleteAccessPolicyRequestPath path = 1;
   DeleteAccessPolicyRequestParams params = 2;
   DeleteAccessPolicyRequestBody body = 3;
 }
 
-// 5.5 Fetch Access Policy
-message FetchAccessPolicyRequestPath {}
-message FetchAccessPolicyRequestParams {}
-message FetchAccessPolicyRequestBody {
+// 5.5 - GET - Fetch Access Policy
+message FetchAccessPolicyRequestPath {
   string id = 1; // Identity ID of the access policy.
 }
+message FetchAccessPolicyRequestParams {}
+message FetchAccessPolicyRequestBody {}
 message FetchAccessPolicyRequest {
   FetchAccessPolicyRequestPath path = 1;
   FetchAccessPolicyRequestParams params = 2;
   FetchAccessPolicyRequestBody body = 3;
 }
 
-// 5.6 Fetch All Access Policies
+// 5.6 - GET - Fetch All Access Policies
 message FetchAllAccessPoliciesRequestPath {}
 message FetchAllAccessPoliciesRequestParams {}
 message FetchAllAccessPoliciesRequestBody {}
@@ -202,7 +200,7 @@ message FetchAllAccessPoliciesRequest {
   FetchAllAccessPoliciesRequestBody body = 3;
 }
 
-// 5.8 Create Holiday Group
+// 5.8 - POST - Create Holiday Group
 message CreateHolidayGroupRequestPath {}
 message CreateHolidayGroupRequestParams {}
 message CreateHolidayGroupRequestBody {
@@ -217,7 +215,7 @@ message CreateHolidayGroupRequest {
   CreateHolidayGroupRequestBody body = 3;
 }
 
-// 5.9 Update Holiday Group
+// 5.9 - PUT - Update Holiday Group
 message UpdateHolidayGroupRequestPath {
   string id = 1; // Identity ID of the holiday group.
 }
@@ -234,7 +232,7 @@ message UpdateHolidayGroupRequest {
   UpdateHolidayGroupRequestBody body = 3;
 }
 
-// 5.10 Delete Holiday Group
+// 5.10 - DELETE - Delete Holiday Group
 message DeleteHolidayGroupRequestPath {
   string id = 1; // Identity ID of the holiday group.
 }
@@ -246,7 +244,7 @@ message DeleteHolidayGroupRequest {
   DeleteHolidayGroupRequestBody body = 3;
 }
 
-// 5.11 Fetch Holiday Group
+// 5.11 - GET - Fetch Holiday Group
 message FetchHolidayGroupRequestPath {
   string id = 1; // Identity ID of the holiday group.
 }
@@ -258,7 +256,7 @@ message FetchHolidayGroupRequest {
   FetchHolidayGroupRequestBody body = 3;
 }
 
-// 5.12 Fetch All Holiday Groups
+// 5.12 - GET - Fetch All Holiday Groups
 message FetchAllHolidayGroupsRequestPath {}
 message FetchAllHolidayGroupsRequestParams {}
 message FetchAllHolidayGroupsRequestBody {}
@@ -268,7 +266,7 @@ message FetchAllHolidayGroupsRequest {
   FetchAllHolidayGroupsRequestBody body = 3;
 }
 
-// 5.14 Create Schedule
+// 5.14 - POST - Create Schedule
 message CreateScheduleRequestPath {}
 message CreateScheduleRequestParams {}
 message CreateScheduleRequestBody {
@@ -283,7 +281,7 @@ message CreateScheduleRequest {
   CreateScheduleRequestBody body = 3;
 }
 
-// 5.15 Update Schedule
+// 5.15 - PUT - Update Schedule
 message UpdateScheduleRequestPath {
   string id = 1; // Identity ID of the schedule.
 }
@@ -300,7 +298,7 @@ message UpdateScheduleRequest {
   UpdateScheduleRequestBody body = 3;
 }
 
-// 5.16 Fetch Schedule
+// 5.16 - GET - Fetch Schedule
 message FetchScheduleRequestPath {
   string id = 1; // Identity ID of the schedule.
 }
@@ -312,7 +310,7 @@ message FetchScheduleRequest {
   FetchScheduleRequestBody body = 3;
 }
 
-// 5.17 Fetch All Schedules
+// 5.17 - GET - Fetch All Schedules
 message FetchAllSchedulesRequestPath {}
 message FetchAllSchedulesRequestParams {}
 message FetchAllSchedulesRequestBody {}
@@ -322,7 +320,7 @@ message FetchAllSchedulesRequest {
   FetchAllSchedulesRequestBody body = 3;
 }
 
-// 5.18 Delete Schedule
+// 5.18 - DELETE - Delete Schedule
 message DeleteScheduleRequestPath {
   string id = 1; // Identity ID of the schedule.
 }
@@ -334,7 +332,7 @@ message DeleteScheduleRequest {
   DeleteScheduleRequestBody body = 3;
 }
 
-// -----------------
+// --------------
 
 message AccessPolicy {
   string id = 1;

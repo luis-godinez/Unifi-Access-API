@@ -38,22 +38,23 @@ service SystemLogService {
   }
 }
 
-// --------------------
-
-// 9.2 Fetch System Logs
+// 9.2 - GET - Fetch System Logs
 message FetchSystemLogsRequestPath {}
 message FetchSystemLogsRequestParams {
   string page_num = 1;  // Current page number in the pagination.
   string page_size = 2; // Number of logs per page.
 }
 message FetchSystemLogsRequestBody {
-  string topic =
-      1; // Fetch different system logs by topic. enum topic
-         // {critical,door_openings,updates,device_events,admin_activity,visitor}
-  int32 since = 2;     // Start time for log fetching, ex: 1689304925
-  int32 until = 3;     // End time for log fetching, ex: 1689804925
-  string actor_id = 4; // Identity ID of the actor (user, visitor, and device),
-                       // ex: 3e1f196e-c97b-4748-aecb-eab5e9c251b2
+  string topic = 1;
+  // Fetch different system logs by topic. enum topic
+  // {critical,door_openings,updates,device_events,admin_activity,visitor}
+  int32 since = 2;
+  // Start time for log fetching, ex: 1689304925
+  int32 until = 3;
+  // End time for log fetching, ex: 1689804925
+  string actor_id = 4;
+  // Identity ID of the actor (user, visitor, and device), ex:
+  // 3e1f196e-c97b-4748-aecb-eab5e9c251b2
 }
 message FetchSystemLogsRequest {
   FetchSystemLogsRequestPath path = 1;
@@ -61,18 +62,22 @@ message FetchSystemLogsRequest {
   FetchSystemLogsRequestBody body = 3;
 }
 
-// 9.3 Export System Logs
+// 9.3 - POST - Export System Logs
 message ExportSystemLogsRequestPath {}
 message ExportSystemLogsRequestParams {}
 message ExportSystemLogsRequestBody {
-  string topic =
-      1; // Fetch different system logs by topic. enum topic
-         // {critical,door_openings,updates,device_events,admin_activity,visitor}
-  int32 since = 2;     // Start time for log fetching, ex: 1689304925
-  int32 until = 3;     // End time for log fetching, ex: 1689804925
-  string timezone = 4; // Timezone for formatting time, ex: America/New_York
-  string actor_id = 5; // Identity ID of the actor (user, visitor, and device),
-                       // ex: 3e1f196e-c97b-4748-aecb-eab5e9c251b2
+  string topic = 1;
+  // Fetch different system logs by topic. enum topic
+  // {critical,door_openings,updates,device_events,admin_activity,visitor}
+  int32 since = 2;
+  // Start time for log fetching, ex: 1689304925
+  int32 until = 3;
+  // End time for log fetching, ex: 1689804925
+  string timezone = 4;
+  // Timezone for formatting time, ex: America/New_York
+  string actor_id = 5;
+  // Identity ID of the actor (user, visitor, and device), ex:
+  // 3e1f196e-c97b-4748-aecb-eab5e9c251b2
 }
 message ExportSystemLogsRequest {
   ExportSystemLogsRequestPath path = 1;
@@ -80,11 +85,12 @@ message ExportSystemLogsRequest {
   ExportSystemLogsRequestBody body = 3;
 }
 
-// 9.4 Fetch Resources in System Logs
+// 9.4 - GET - Fetch Resources in System Logs
 message FetchResourcesInSystemLogsRequestPath {
-  string id = 1; // Resource ID is obtained from targets categorized as the
-                 // 'activities_resource' type in system logs.
-  // "target": [{"type": "activities_resource","id": "0418d6a38f00-b6906057-
+  string id = 1;
+  // Resource ID is obtained from targets categorized as the
+  // 'activities_resource' type in system logs. "target": [{"type":
+  // "activities_resource","id": "0418d6a38f00-b6906057-
   // 2a90-4426-835c-b5b172381fec","display_name": "Resource","alternate_id":
   // "","alternate_name": ""}]
 }
@@ -97,10 +103,11 @@ message FetchResourcesInSystemLogsRequest {
   FetchResourcesInSystemLogsRequestBody body = 3;
 }
 
-// 9.5 Fetch Static Resources in System Logs
+// 9.5 - GET - Fetch Static Resources in System Logs
 message FetchStaticResourcesInSystemLogsRequestPath {
-  string path = 1; // Resource paths, currently supporting /avatar, /capture,
-                   // and activities_resource.
+  string path = 1;
+  // Resource paths, currently supporting /avatar, /capture, and
+  // activities_resource.
 }
 message FetchStaticResourcesInSystemLogsRequestParams {}
 message FetchStaticResourcesInSystemLogsRequestBody {}
@@ -191,15 +198,19 @@ message Target {
 enum LogTopic {
   // Note, the documentation specifies this is an enum but doesn't list the
   // indexes.
-  ALL = 0;           // Fetch all logs
-  DOOR_OPENINGS = 1; // Fetch door opening logs
-  CRITICAL = 2; // Fetch logs for device restart, deletion, offline status, and
-                // detection
-  UPDATES = 3;  // Fetch device update logs
-  DEVICE_EVENTS =
-      4; // Fetch logs for device online status, device updates, access policy
-         // synchronization, and active and inactive door unlock schedules
-  ADMIN_ACTIVITY = 5; // Fetch logs for admin activity, such as access policy
-                      // updates, settings changes, and user management
-  VISITOR = 6;        // Fetch logs of visitor-related operations
+  ALL = 0;
+  // Fetch all logs
+  DOOR_OPENINGS = 1;
+  // Fetch door opening logs
+  CRITICAL = 2;
+  // Fetch logs for device restart, deletion, offline status, and detection
+  UPDATES = 3; // Fetch device update logs
+  DEVICE_EVENTS = 4;
+  // Fetch logs for device online status, device updates, access policy
+  // synchronization, and active and inactive door unlock schedules
+  ADMIN_ACTIVITY = 5;
+  // Fetch logs for admin activity, such as access policy updates, settings
+  // changes, and user management
+  VISITOR = 6;
+  // Fetch logs of visitor-related operations
 }

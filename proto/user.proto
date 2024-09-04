@@ -8,6 +8,7 @@ import "access_policy.proto";
 import "shared.proto";
 
 service UserService {
+  // 3.2 Create User
   rpc CreateUser(CreateUserRequest) returns (UserResponse) {
     option (google.api.http) = {
       post : "/api/v1/developer/users"
@@ -15,6 +16,7 @@ service UserService {
     };
   }
 
+  // 3.3 Update User
   rpc UpdateUser(UpdateUserRequest) returns (UserResponse) {
     option (google.api.http) = {
       put : "/api/v1/developer/users/{id}"
@@ -22,18 +24,21 @@ service UserService {
     };
   }
 
+  // 3.4 Fetch User
   rpc FetchUser(FetchUserRequest) returns (UserResponse) {
     option (google.api.http) = {
       get : "/api/v1/developer/users/{id}"
     };
   }
 
+  // 3.5 Fetch All Users
   rpc FetchAllUsers(FetchAllUsersRequest) returns (UsersResponse) {
     option (google.api.http) = {
       get : "/api/v1/developer/users/users"
     };
   }
 
+  // 3.6 Assign Access Policy to User
   rpc AssignUserAccessPolicy(AssignUserAccessPolicyRequest)
       returns (shared.StatusCodeResponse) {
     option (google.api.http) = {
@@ -42,6 +47,7 @@ service UserService {
     };
   }
 
+  // 3.7 Assign NFC Card from User
   rpc AssignUserNfcCard(AssignUserNfcCardRequest)
       returns (shared.StatusCodeResponse) {
     option (google.api.http) = {
@@ -50,6 +56,7 @@ service UserService {
     };
   }
 
+  // 3.8 Unassign NFC Card from User
   rpc UnassignUserNfcCard(UnassignUserNfcCardRequest)
       returns (shared.StatusCodeResponse) {
     option (google.api.http) = {
@@ -57,6 +64,7 @@ service UserService {
     };
   }
 
+  // 3.9 Assign PIN Code to User
   rpc AssignUserPinCode(AssignUserPinCodeRequest)
       returns (shared.StatusCodeResponse) {
     option (google.api.http) = {
@@ -65,6 +73,7 @@ service UserService {
     };
   }
 
+  // 3.10 Unassign PIN Code from user
   rpc UnassignUserPinCode(UnassignUserPinCodeRequest)
       returns (shared.StatusCodeResponse) {
     option (google.api.http) = {
@@ -72,6 +81,7 @@ service UserService {
     };
   }
 
+  // 3.11 Create User Group
   rpc CreateUserGroup(CreateUserGroupRequest)
       returns (shared.StatusCodeResponse) {
     option (google.api.http) = {
@@ -80,6 +90,7 @@ service UserService {
     };
   }
 
+  // 3.12 Fetch All User Groups
   rpc FetchAllUserGroups(FetchAllUserGroupsRequest)
       returns (UserGroupsResponse) {
     option (google.api.http) = {
@@ -87,12 +98,14 @@ service UserService {
     };
   }
 
+  // 3.13 Fetch User Group
   rpc FetchUserGroups(FetchUserGroupRequest) returns (UserGroupResponse) {
     option (google.api.http) = {
       get : "/api/v1/developer/user_groups/{id}"
     };
   }
 
+  // 3.14 Update User Group
   rpc UpdateUserGroup(UpdateUserGroupRequest)
       returns (shared.StatusCodeResponse) {
     option (google.api.http) = {
@@ -101,6 +114,7 @@ service UserService {
     };
   }
 
+  // 3.15 Delete User Group
   rpc DeleteUserGroup(DeleteUserGroupRequest)
       returns (shared.StatusCodeResponse) {
     option (google.api.http) = {
@@ -108,6 +122,7 @@ service UserService {
     };
   }
 
+  // 3.16 Assign User to User Group
   rpc AssignUserToUserGroup(AssignUserToUserGroupRequest)
       returns (shared.StatusCodeResponse) {
     option (google.api.http) = {
@@ -116,6 +131,7 @@ service UserService {
     };
   }
 
+  // 3.17 Uniassigh User from User Group
   rpc UnassignUserFromUserGroup(UnassignUserFromUserGroupRequest)
       returns (shared.StatusCodeResponse) {
     option (google.api.http) = {
@@ -124,6 +140,7 @@ service UserService {
     };
   }
 
+  // 3.18 Fetch Users in a User Group
   rpc FetchUsersInUserGroup(FetchUsersInUserGroupRequest)
       returns (UsersResponse) {
     option (google.api.http) = {
@@ -131,6 +148,7 @@ service UserService {
     };
   }
 
+  // 3.19 Fetch All Users in a User Group
   rpc FetchAllUsersInUserGroup(FetchAllUsersInUserGroupRequest)
       returns (UsersResponse) {
     option (google.api.http) = {
@@ -138,6 +156,7 @@ service UserService {
     };
   }
 
+  // 3.20 Fetch the Access Policies Assigned to a User
   rpc FetchUserAccessPolicies(FetchUserAccessPoliciesRequest)
       returns (access_policy.AccessPoliciesResponse) {
     option (google.api.http) = {
@@ -145,6 +164,7 @@ service UserService {
     };
   }
 
+  // 3.21 Assign Access Policy to User Group
   rpc AssignUserGroupAccessPolicy(AssignUserGroupAccessPolicyRequest)
       returns (UserGroupResponse) {
     option (google.api.http) = {
@@ -153,6 +173,7 @@ service UserService {
     };
   }
 
+  // 3.22 Fetch the Access Policies Assigned to a User Group
   rpc FetchUserGroupAccessPolicies(FetchUserGroupAccessPoliciesRequest)
       returns (access_policy.AccessPoliciesResponse) {
     option (google.api.http) = {
@@ -161,7 +182,7 @@ service UserService {
   }
 }
 
-// 3.2 User Registration
+// 3.2 - POST - User Registration
 message CreateUserRequestPath {}
 message CreateUserRequestParams {}
 message CreateUserRequestBody {
@@ -177,7 +198,7 @@ message CreateUserRequest {
   CreateUserRequestBody body = 3;
 }
 
-// 3.3 Update User
+// 3.3 - PUT - Update User
 message UpdateUserRequestPath { string id = 1; }
 message UpdateUserRequestParams {}
 message UpdateUserRequestBody {
@@ -194,12 +215,12 @@ message UpdateUserRequest {
   UpdateUserRequestBody body = 3;
 }
 
-// 3.4 Fetch User
+// 3.4 - GET - Fetch User
 message FetchUserRequestPath { string id = 1; }
 message FetchUserRequestParams {
-  bool expand =
-      1; // Whether to expand the access_policy field. If true, your app must
-         // include "expand[]=access_policy" in the request URL paramters
+  bool expand = 1;
+  // Whether to expand the access_policy field. If true, your app must include
+  // "expand[]=access_policy" in the request URL paramters
 }
 message FetchUserRequestBody {}
 message FetchUserRequest {
@@ -208,7 +229,7 @@ message FetchUserRequest {
   FetchUserRequestBody body = 3;
 }
 
-// 3.5 Fetch All Users
+// 3.5 - GET - Fetch All Users
 message FetchAllUsersRequestPath {}
 message FetchAllUsersRequestParams {
   bool expand =
@@ -224,7 +245,7 @@ message FetchAllUsersRequest {
   FetchAllUsersRequestBody body = 3;
 }
 
-// 3.6 Assign Access Policies to User
+// 3.6 - PUT - Assign Access Policies to User
 message AssignUserAccessPolicyRequestPath { string id = 1; }
 message AssignUserAccessPolicyRequestParams {}
 message AssignUserAccessPolicyRequestBody {
@@ -236,7 +257,7 @@ message AssignUserAccessPolicyRequest {
   AssignUserAccessPolicyRequestBody body = 3;
 }
 
-// 3.7 Assign NFC Card to User
+// 3.7 - PUT - Assign NFC Card to User
 message AssignUserNfcCardRequestPath { string id = 1; }
 message AssignUserNfcCardRequestParams {}
 message AssignUserNfcCardRequestBody {
@@ -250,7 +271,7 @@ message AssignUserNfcCardRequest {
   AssignUserNfcCardRequestBody body = 3;
 }
 
-// 3.8 Unassign NFC Card from User
+// 3.8 - PUT - Unassign NFC Card from User
 message UnassignUserNfcCardRequestPath { string id = 1; }
 message UnassignUserNfcCardRequestParams {}
 message UnassignUserNfcCardRequestBody { string token = 1; }
@@ -260,7 +281,7 @@ message UnassignUserNfcCardRequest {
   UnassignUserNfcCardRequestBody body = 3;
 }
 
-// 3.9 Assign PIN Code to User
+// 3.9 - PUT - Assign PIN Code to User
 message AssignUserPinCodeRequestPath { string id = 1; }
 message AssignUserPinCodeRequestParams {}
 message AssignUserPinCodeRequestBody { string pin_code = 1; }
@@ -270,7 +291,7 @@ message AssignUserPinCodeRequest {
   AssignUserPinCodeRequestBody body = 3;
 }
 
-// 3.10 Unassign PIN Code to User
+// 3.10 - DELETE - Unassign PIN Code to User
 message UnassignUserPinCodeRequestPath { string id = 1; }
 message UnassignUserPinCodeRequestParams {}
 message UnassignUserPinCodeRequestBody {}
@@ -280,7 +301,7 @@ message UnassignUserPinCodeRequest {
   UnassignUserPinCodeRequestBody body = 3;
 }
 
-// 3.11 Create User Group
+// 3.11 - POST - Create User Group
 message CreateUserGroupRequestPath {}
 message CreateUserGroupRequestParams {}
 message CreateUserGroupRequestBody {
@@ -293,7 +314,7 @@ message CreateUserGroupRequest {
   CreateUserGroupRequestBody body = 3;
 }
 
-// 3.12 Fetch All User Groups
+// 3.12 - GET - Fetch All User Groups
 message FetchAllUserGroupsRequestPath {}
 message FetchAllUserGroupsRequestParams {}
 message FetchAllUserGroupsRequestBody {}
@@ -303,7 +324,7 @@ message FetchAllUserGroupsRequest {
   FetchAllUserGroupsRequestBody body = 3;
 }
 
-// 3.13 Fetch User Group
+// 3.13 - GET - Fetch User Group
 message FetchUserGroupRequestPath { string id = 1; }
 message FetchUserGroupRequestParams {}
 message FetchUserGroupRequestBody {}
@@ -313,7 +334,7 @@ message FetchUserGroupRequest {
   FetchUserGroupRequestBody body = 3;
 }
 
-// 3.14 Update User Group
+// 3.14 - PUT - Update User Group
 message UpdateUserGroupRequestPath { string id = 1; }
 message UpdateUserGroupRequestParams {}
 message UpdateUserGroupRequestBody {
@@ -326,7 +347,7 @@ message UpdateUserGroupRequest {
   UpdateUserGroupRequestBody body = 3;
 }
 
-// 3.15 Delete User Group
+// 3.15 - DELETE - Delete User Group
 message DeleteUserGroupRequestPath { string id = 1; }
 message DeleteUserGroupRequestParams {}
 message DeleteUserGroupRequestBody {}
@@ -336,13 +357,14 @@ message DeleteUserGroupRequest {
   DeleteUserGroupRequestBody body = 3;
 }
 
-// 3.16 Assign User to User Group
+// 3.16 - POST - Assign User to User Group
 message AssignUserToUserGroupRequestPath {
   string id = 1; // Get it from the API, /api/v1/developer/user_groups
 }
 message AssignUserToUserGroupRequestParams {}
 message AssignUserToUserGroupRequestBody {
-  repeated string user_id = 1; // Get it from the API, /api/v1/developer/users
+  repeated string user_id = 1;
+  // Get it from the API, /api/v1/developer/users
   // The api documentation reads as a method for one user ID, but the repeated
   // string implies that it may support multiple user IDs at once.
 }
@@ -352,13 +374,14 @@ message AssignUserToUserGroupRequest {
   AssignUserToUserGroupRequestBody body = 3;
 }
 
-// 3.17 Unassign User from User Group
+// 3.17 - POST - Unassign User from User Group
 message UnassignUserFromUserGroupRequestPath {
   string id = 1; // Identify ID of the user group
 }
 message UnassignUserFromUserGroupRequestParams {}
 message UnassignUserFromUserGroupRequestBody {
-  repeated string user_id = 1; // Get it from the API, /api/v1/developer/users
+  repeated string user_id = 1;
+  // Get it from the API, /api/v1/developer/users
   // The api documentation reads as a method for one user ID, but the repeated
   // string implies that it may support multiple user IDs at once.
 }
@@ -368,7 +391,7 @@ message UnassignUserFromUserGroupRequest {
   UnassignUserFromUserGroupRequestBody body = 3;
 }
 
-// 3.18 Fetch Users in a User Group
+// 3.18 - GET - Fetch Users in a User Group
 message FetchUsersInUserGroupRequestPath {
   string id = 1; // Identify ID of the user group
 }
@@ -380,7 +403,7 @@ message FetchUsersInUserGroupRequest {
   FetchUsersInUserGroupRequestBody body = 3;
 }
 
-// 3.19 Fetch All Users in a User Group, including subgroups
+// 3.19 - GET - Fetch All Users in a User Group, including subgroups
 message FetchAllUsersInUserGroupRequestPath {
   string id = 1; // Identify ID of the user group
 }
@@ -392,7 +415,7 @@ message FetchAllUsersInUserGroupRequest {
   FetchAllUsersInUserGroupRequestBody body = 3;
 }
 
-// 3.20 Fetch the Access Policies Assigned to a User
+// 3.20 - GET - Fetch the Access Policies Assigned to a User
 message FetchUserAccessPoliciesRequestPath {
   string id = 1; // Identify ID of the user
 }
@@ -408,16 +431,17 @@ message FetchUserAccessPoliciesRequest {
   FetchUserAccessPoliciesRequestBody body = 3;
 }
 
-// 3.21 Assign Access Policy to User Group
+// 3.21 - PUT - Assign Access Policy to User Group
 message AssignUserGroupAccessPolicyRequestPath {
-  string id = 1; // Identity ID of the user group. Get it from the API,
-                 // /api/v1/developer/user_groups
+  string id = 1;
+  // Identity ID of the user group. Get it from the API,
+  // /api/v1/developer/user_groups
 }
 message AssignUserGroupAccessPolicyRequestParams {}
 message AssignUserGroupAccessPolicyRequestBody {
-  repeated string access_policy_ids =
-      1; // Identity ID of the access policy. Get it from the API,
-         // /api/v1/developer/access_policies
+  repeated string access_policy_ids = 1;
+  // Identity ID of the access policy. Get it from the API,
+  // /api/v1/developer/access_policies
 }
 message AssignUserGroupAccessPolicyRequest {
   AssignUserGroupAccessPolicyRequestPath path = 1;
@@ -425,10 +449,11 @@ message AssignUserGroupAccessPolicyRequest {
   AssignUserGroupAccessPolicyRequestBody body = 3;
 }
 
-// 3.22 Fetch the Access Policies Assigned to a User Group
+// 3.22 - GET - Fetch the Access Policies Assigned to a User Group
 message FetchUserGroupAccessPoliciesRequestPath {
-  string id = 1; // Identity ID of the user group. Get it from the API,
-                 // /api/v1/developer/user_groups
+  string id = 1;
+  // Identity ID of the user group. Get it from the API,
+  // /api/v1/developer/user_groups
 }
 message FetchUserGroupAccessPoliciesRequestParams {}
 message FetchUserGroupAccessPoliciesRequestBody {}
@@ -438,7 +463,7 @@ message FetchUserGroupAccessPoliciesRequest {
   FetchUserGroupAccessPoliciesRequestBody body = 3;
 }
 
-// ---------
+// --------------
 
 message User {
   string id = 1;
