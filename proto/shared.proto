@@ -3,22 +3,20 @@ syntax = "proto3";
 package shared;
 
 message NFC_Card {
-    string id = 1;
-    string token = 2;
+  string id = 1;
+  string token = 2;
 }
 
-message PIN_Code {
-    string token = 1;
-}
+message PIN_Code { string token = 1; }
 
 // 2.3 Success Code, 2.4 Error Code
 message StatusCodeResponse {
-    string code = 1;
-    string msg = 2;
+  string code = 1;
+  string msg = 2;
 }
 
 message Resource {
-    string id = 1;   // ID of the door group
-    string name = 2; // Name of the door group
-    string type = 3; // Type of the door group
-  }
+  string id = 1;   // ID of the door group
+  string name = 2; // Name of the door group
+  string type = 3; // Type of the door group
+}

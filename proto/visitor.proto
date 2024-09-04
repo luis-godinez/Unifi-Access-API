@@ -83,16 +83,17 @@ service VisitorService {
 message CreateVisitorRequestPath {}
 message CreateVisitorRequestParams {}
 message CreateVisitorRequestBody {
-  string first_name = 1;           // First name of the visitors
-  string last_name = 2;            // Last name of the visitor
-  string remarks = 17;             // Remarks about the visitor
-  string mobile_phone = 4;         // Mobile phone number of the visitor
-  string email = 3;                // Email address of the visitor
-  string visitor_company = 5;      // Company name of the visitor
-  int64 start_time = 6;            // Start time of the visit, ex: 1688546460
-  int64 end_time = 7;              // End time of the visit, ex: 1688572799
-  string visit_reason = 8;         // Visit reason, see VisitReason enum.
-  repeated shared.Resource resources = 9; // Assign available locations to the visitor.
+  string first_name = 1;      // First name of the visitors
+  string last_name = 2;       // Last name of the visitor
+  string remarks = 17;        // Remarks about the visitor
+  string mobile_phone = 4;    // Mobile phone number of the visitor
+  string email = 3;           // Email address of the visitor
+  string visitor_company = 5; // Company name of the visitor
+  int64 start_time = 6;       // Start time of the visit, ex: 1688546460
+  int64 end_time = 7;         // End time of the visit, ex: 1688572799
+  string visit_reason = 8;    // Visit reason, see VisitReason enum.
+  repeated shared.Resource resources =
+      9; // Assign available locations to the visitor.
   access_policy.WeekSchedule week_schedule =
       10; // The customizable scheduling strategy for each day from Sunday to
           // Saturday. If not specified, it means access is allowed every day
@@ -258,8 +259,10 @@ message Visitor {
       10;                        // NFC cards associated with the visitor
   shared.PIN_Code pin_code = 11; // PIN code associated with the visitor
   string schedule_id = 12;       // Schedule ID associated with the visit
-  access_policy.Schedule schedule = 13;        // Schedule details. One-time visit if missing.
-  repeated shared.Resource resources = 14; // Locations that the visitor can access
+  access_policy.Schedule schedule =
+      13; // Schedule details. One-time visit if missing.
+  repeated shared.Resource resources =
+      14; // Locations that the visitor can access
 }
 
 enum Status {
