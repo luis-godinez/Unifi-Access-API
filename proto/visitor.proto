@@ -8,7 +8,7 @@ import "shared.proto";
 import "access_policy.proto";
 
 service VisitorService {
-  // Create a new visitor
+  // 4.2 Create a new visitor
   rpc CreateVisitor(CreateVisitorRequest) returns (VisitorResponse) {
     option (google.api.http) = {
       post : "/api/v1/developer/visitors"
@@ -16,21 +16,21 @@ service VisitorService {
     };
   }
 
-  // Fetch visitor details by ID
+  // 4.3 Fetch visitor details by ID
   rpc FetchVisitor(FetchVisitorRequest) returns (VisitorResponse) {
     option (google.api.http) = {
       get : "/api/v1/developer/visitors/{id}"
     };
   }
 
-  // Fetch all visitors
+  // 4.4 Fetch all visitors
   rpc FetchAllVisitors(FetchAllVisitorsRequest) returns (VisitorsResponse) {
     option (google.api.http) = {
       get : "/api/v1/developer/visitors"
     };
   }
 
-  // Update a visitor by ID
+  // 4.5 Update a visitor by ID
   rpc UpdateVisitor(UpdateVisitorRequest) returns (VisitorResponse) {
     option (google.api.http) = {
       put : "/api/v1/developer/visitors/{id}"
@@ -38,7 +38,7 @@ service VisitorService {
     };
   }
 
-  // Delete a visitor by ID
+  // 4.6 Delete a visitor by ID
   rpc DeleteVisitor(DeleteVisitorRequest) returns (VisitorResponse) {
     option (google.api.http) = {
       delete : "/api/v1/developer/visitors/{id}"
@@ -46,7 +46,7 @@ service VisitorService {
     };
   }
 
-  // Assign Visitor NFC Card
+  // 4.7 Assign Visitor NFC Card
   rpc AssignVisitorNfcCard(AssignVisitorNfcCardRequest)
       returns (shared.StatusCodeResponse) {
     option (google.api.http) = {
@@ -54,7 +54,7 @@ service VisitorService {
       body : "*"
     };
   }
-  // Unassign Visitor NFC Card
+  // 4.8 Unassign Visitor NFC Card
   rpc UnassignVisitorNfcCard(UnassignVisitorNfcCardRequest)
       returns (shared.StatusCodeResponse) {
     option (google.api.http) = {
@@ -62,7 +62,7 @@ service VisitorService {
       body : "*"
     };
   }
-  // Assign Visitor Pin Code
+  // 4.9 Assign Visitor Pin Code
   rpc AssignVisitorPinCode(AssignVisitorPinCodeRequest)
       returns (shared.StatusCodeResponse) {
     option (google.api.http) = {
@@ -70,7 +70,7 @@ service VisitorService {
       body : "*"
     };
   }
-  // Unassisgn Visitor Pin Code
+  // 4.10 Unassisgn Visitor Pin Code
   rpc UnassignVisitorPinCode(UnassignVisitorPinCodeRequest)
       returns (shared.StatusCodeResponse) {
     option (google.api.http) = {

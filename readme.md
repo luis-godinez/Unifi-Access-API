@@ -8,6 +8,9 @@
 
 This repository provides protobuf definitions for the Ubiquiti Access API, allowing developers to generate client libraries, validate messages, and define services for integration with Ubiquiti Access systems. These definitions are intended for use in creating message and service definitions, and are not tied to any specific server implementation.
 
+Note:
+* Section 11 on Webhooks was omitted.
+
 ## Disclaimer
 
 This is unofficial API documentation for the Ubiquiti Access API. It is provided as-is without any guarantees of accuracy or completeness. Use at your own risk.

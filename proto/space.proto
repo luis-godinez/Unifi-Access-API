@@ -2,143 +2,386 @@ syntax = "proto3";
 
 package space;
 
-message Space {
-    string id = 1;
-    string name = 2;
-    repeated Floor floors = 3;
-}
-
-message Floor {
-    string id = 1;
-    string name = 2;
-    repeated Door resources = 3;
-}
-
-message Door {
-    string id = 1;
-    string name = 2;
-    string type = 3; // e.g., "door"
-    bool is_bind_hub = 4; // Indicates if the door is bound to a hub device
-}
+import "google/api/annotations.proto";
 
 service SpaceService {
-    rpc FetchDoorGroupTopology(FetchDoorGroupTopologyRequest) returns (FetchDoorGroupTopologyResponse);
-    rpc CreateDoorGroup(CreateDoorGroupRequest) returns (DoorGroupResponse);
-    rpc FetchDoorGroup(FetchDoorGroupRequest) returns (DoorGroupResponse);
-    rpc UpdateDoorGroup(UpdateDoorGroupRequest) returns (DoorGroupResponse);
-    rpc FetchAllDoorGroups(FetchAllDoorGroupsRequest) returns (DoorGroupsResponse);
-    rpc DeleteDoorGroup(DeleteDoorGroupRequest) returns (DeleteDoorGroupResponse);
-    rpc FetchDoor(FetchDoorRequest) returns (DoorResponse);
-    rpc FetchAllDoors(FetchAllDoorsRequest) returns (DoorsResponse);
-    rpc RemoteDoorUnlocking(RemoteDoorUnlockingRequest) returns (DoorUnlockResponse);
-    rpc SetTemporaryDoorLockingRule(SetTemporaryDoorLockingRuleRequest) returns (DoorLockingRuleResponse);
+  // 7.1 Fetch Door Group Topology
+  rpc FetchDoorGroupTopology(FetchDoorGroupTopologyRequest)
+      returns (ResourcesResponse) {
+    option (google.api.http) = {
+      get : "/api/v1/developer/door_groups/topology"
+    };
+  }
+  // 7.2 Create Door Group
+  rpc CreateDoorGroup(CreateDoorGroupRequest)
+      returns (ResourceResponse) {
+    option (google.api.http) = {
+      post : "/api/v1/developer/door_groups"
+      body : "*"
+    };
+  }
+  // 7.3 Fetch Door Group
+  rpc FetchDoorGroup(FetchDoorGroupRequest)
+      returns (ResourceResponse) {
+    option (google.api.http) = {
+      get : "/api/v1/developer/door_groups/{id}"
+    };
+  }
+  // 7.4 Update Door Group
+  rpc UpdateDoorGroup(UpdateDoorGroupRequest)
+      returns (ResourceResponse) {
+    option (google.api.http) = {
+      put : "/api/v1/developer/door_groups/{id}"
+      body: "*"
+    };
+  }
+  // 7.5 Fetch All Door Groups
+  rpc FetchAllDoorGroups(FetchAllDoorGroupsRequest)
+      returns (ResourcesResponse) {
+    option (google.api.http) = {
+      get : "/api/v1/developer/door_groups"
+    };
+  }
+  // 7.6 Delete Door Group
+  rpc DeleteDoorGroup(DeleteDoorGroupRequest)
+      returns (ResourceResponse) {
+    option (google.api.http) = {
+      delete : "/api/v1/developer/door_groups/{id}"
+    };
+  }
+  // 7.7 Fetch Door
+  rpc FetchDoor(FetchDoorRequest)
+      returns (DoorResponse) {
+    option (google.api.http) = {
+      get : "/api/v1/developer/doors/{id}"
+    };
+  }
+  // 7.8 Fetch All Doors
+  rpc FetchAllDoors(FetchAllDoorsRequest)
+      returns (DoorsResponse) {
+    option (google.api.http) = {
+      get : "/api/v1/developer/doors"
+    };
+  }
+  // 7.9 Remote Door Unlocking
+  rpc RemoteDoorUnlocking(RemoteDoorUnlockingRequest)
+      returns (DoorStatusResponse) {
+    option (google.api.http) = {
+      put : "/api/v1/developer/doors/{id}/unlock"
+      body: "*"
+    };
+  }
+  // 7.10 Set Temporary Door Locking Rule
+  rpc SetTemporaryDoorLockingRule(SetTemporaryDoorLockingRuleRequest)
+      returns (DoorStatusResponse) {
+    option (google.api.http) = {
+      put : "/api/v1/developer/doors/{id}/lock_rule"
+      body: "*"
+    };
+  }
+  // 7.11 Fetch Door Locking Rule
+  rpc FetchDoorLockingRule(FetchDoorLockingRuleRequest)
+      returns (DoorLockingRuleResponse) {
+    option (google.api.http) = {
+      get : "/api/v1/developer/doors/{id}/lock_rule"
+    };
+  }
+  // 7.12 Set Door Emergency Status
+  rpc SetDoorEmergencyStatus(SetDoorEmergencyStatusRequest)
+      returns (DoorStatusResponse) {
+    option (google.api.http) = {
+      put : "/api/v1/developer/doors/settings/emergency"
+      body: "*"
+    };
+  }
+  // 7.13 Fetch Door Emergency Status
+  rpc FetchDoorEmergencyStatus(FetchDoorEmergencyStatusRequest)
+      returns (DoorEmergencyStatusResponse) {
+    option (google.api.http) = {
+      get : "/api/v1/developer/doors/settings/emergency"
+    };
+  }
+
 }
+// ----------------
 
-message FetchDoorGroupTopologyRequest {}
-
-message FetchDoorGroupTopologyResponse {
-    string code = 1;
-    string msg = 2;
-    repeated DoorGroupTopology data = 3;
+// 7.1 Fetch Door Group Topology
+message FetchDoorGroupTopologyRequestPath {
+    
 }
+message FetchDoorGroupTopologyRequestParams {
 
-message DoorGroupTopology {
+}
+message FetchDoorGroupTopologyRequestBody {
     string id = 1;
-    string name = 2;
-    repeated Floor floors = 3;
+    string type = 2;
+    repeated ResourceTopology resource_topologies = 3;
+}
+message FetchDoorGroupTopologyRequest {
+    FetchDoorGroupTopologyRequestPath path = 1;
+    FetchDoorGroupTopologyRequestParams params = 2;
+    FetchDoorGroupTopologyRequestBody body = 3;
 }
 
+// 7.2 Create Door Group
+message CreateDoorGroupRequestPath {
+}
+message CreateDoorGroupRequestParams {
+}
+message CreateDoorGroupRequestBody {
+    string group_name = 1; // Name of the door group. This needs to be globally unique
+    repeated Resource resources = 2; // Collection of door ID
+}
 message CreateDoorGroupRequest {
-    string name = 1;
-    repeated string resources = 2; // List of door IDs
+    CreateDoorGroupRequestPath path = 1;
+    CreateDoorGroupRequestParams params = 2;
+    CreateDoorGroupRequestBody body = 3;
 }
 
-message DoorGroupResponse {
-    string code = 1;
-    string msg = 2;
-    DoorGroup data = 3;
-}
-
-message DoorGroup {
+// 7.3 Fetch Door Group
+message FetchDoorGroupRequestPath {
     string id = 1;
-    string name = 2;
-    repeated string resources = 3; // List of door IDs
 }
-
+message FetchDoorGroupRequestParams {
+}
+message FetchDoorGroupRequestBody {
+}
 message FetchDoorGroupRequest {
-    string id = 1;
+    FetchDoorGroupRequestPath path = 1;
+    FetchDoorGroupRequestParams params = 2;
+    FetchDoorGroupRequestBody body = 3;
 }
 
+// 7.4 Update Door Group
+message UpdateDoorGroupRequestPath {
+    string id = 1;
+}
+message UpdateDoorGroupRequestParams {
+
+}
+message UpdateDoorGroupRequestBody {
+    string group_name = 1;
+    repeated Resource resources = 2;
+}
 message UpdateDoorGroupRequest {
-    string id = 1;
-    string name = 2;
-    repeated string resources = 3;
+    UpdateDoorGroupRequestPath path = 1;
+    UpdateDoorGroupRequestParams params = 2;
+    UpdateDoorGroupRequestBody body = 3;
 }
 
+// 7.5 Fetch All Door Groups
+message FetchAllDoorGroupsRequestPath {
+}
+message FetchAllDoorGroupsRequestParams {
+}
+message FetchAllDoorGroupsRequestBody {
+}
 message FetchAllDoorGroupsRequest {
-    int32 page_num = 1;
-    int32 page_size = 2;
+    FetchAllDoorGroupsRequestPath path = 1;
+    FetchAllDoorGroupsRequestParams params = 2;
+    FetchAllDoorGroupsRequestBody body = 3;
 }
 
-message DoorGroupsResponse {
-    string code = 1;
-    string msg = 2;
-    repeated DoorGroup data = 3;
-    Pagination pagination = 4;
+// 7.6 Delete Door Group
+message DeleteDoorGroupRequestPath {
+    string id = 1;
 }
-
+message DeleteDoorGroupRequestParams {
+}
+message DeleteDoorGroupRequestBody {
+}
 message DeleteDoorGroupRequest {
+    DeleteDoorGroupRequestPath path = 1;
+    DeleteDoorGroupRequestParams params = 2;
+    DeleteDoorGroupRequestBody body = 3;
+}
+
+// 7.7 Fetch Door
+message FetchDoorRequestPath {
     string id = 1;
 }
+message FetchDoorRequestParams {
 
-message DeleteDoorGroupResponse {
-    string code = 1;
-    string msg = 2;
 }
+message FetchDoorRequestBody {
 
+}
 message FetchDoorRequest {
+    FetchDoorRequestPath path = 1;
+    FetchDoorRequestParams params = 2;
+    FetchDoorRequestBody body = 3;
+}
+
+// 7.8 Fetch All Doors
+message FetchAllDoorsRequestPath {
+}
+message FetchAllDoorsRequestParams {
+}
+message FetchAllDoorsRequestBody {
+}
+message FetchAllDoorsRequest {
+    FetchAllDoorsRequestPath path = 1;
+    FetchAllDoorsRequestParams params = 2;
+    FetchAllDoorsRequestBody body = 3;
+}
+
+// 7.9 Remote Door Unlocking
+message RemoteDoorUnlockingRequestPath {
     string id = 1;
 }
-
-message DoorResponse {
-    string code = 1;
-    string msg = 2;
-    Door data = 3;
+message RemoteDoorUnlockingRequestParams {
 }
-
-message FetchAllDoorsRequest {
-    int32 page_num = 1;
-    int32 page_size = 2;
+message RemoteDoorUnlockingRequestBody {
 }
-
-message DoorsResponse {
-    string code = 1;
-    string msg = 2;
-    repeated Door data = 3;
-    Pagination pagination = 4;
-}
-
 message RemoteDoorUnlockingRequest {
-    string id = 1; // Door ID
+    RemoteDoorUnlockingRequestPath path = 1;
+    RemoteDoorUnlockingRequestParams params = 2;
+    RemoteDoorUnlockingRequestBody body = 3;
 }
 
-message DoorUnlockResponse {
-    string code = 1;
-    string msg = 2;
+// 7.10 Set Temporary Door Locking Rule
+message SetTemporaryDoorLockingRuleRequestPath {
+    string id = 1;
 }
-
+message SetTemporaryDoorLockingRuleRequestParams {
+}
+message SetTemporaryDoorLockingRuleRequestBody {
+    // enum type {keep_lock,keep_unlock,custom,reset,lock_early} keep_lock is used to set the door to the "keep locked" state, while keep_unlock is used to set it to the "keep unlocked" state. custom allows customization of the unlock time duration, and reset is used to restore the door to its initial state (not applicable to the "lock_early" state). NOTE: If the door is currently on an unlock schedule ( schedule ), you can use lock_early to lock the door early.
+    string type = 1;
+    // Set the lock time duration (minutes) when type is custom, ex: 10
+    int32 interval = 2; 
+}
 message SetTemporaryDoorLockingRuleRequest {
-    string door_id = 1;
-    string rule = 2; // The rule to apply
+    SetTemporaryDoorLockingRuleRequestPath path = 1;
+    SetTemporaryDoorLockingRuleRequestParams params = 2;
+    SetTemporaryDoorLockingRuleRequestBody body = 3;
 }
 
-message DoorLockingRuleResponse {
+// 7.11 Fetch Door Locking Rule
+message FetchDoorLockingRuleRequestPath {
+    string id = 1;
+}
+message FetchDoorLockingRuleRequestParams {
+}
+message FetchDoorLockingRuleRequestBody {
+    // enum type {schedule,keep_lock,keep_unlock,custom,lock_early} keep_lock is used to set the "keep locked" state, while keep_unlock is used to set the "keep unlocked" state. custom is used to customize the unlock time duration. schedule indicates that the door is currently in the unlock schedule state. The lock_early is used to terminate doors in an unlock schedule early.
+    string type = 1;
+    // End time of the set rule, ex: 1708672257
+    int32 ended_time = 2;
+}
+message FetchDoorLockingRuleRequest {
+    FetchDoorLockingRuleRequestPath path = 1;
+    FetchDoorLockingRuleRequestParams params = 2;
+    FetchDoorLockingRuleRequestBody body = 3;
+}
+
+// 7.12 Set Door Emergency Status
+message SetDoorEmergencyStatusRequestPath {
+}
+message SetDoorEmergencyStatusRequestParams {
+}
+message SetDoorEmergencyStatusRequestBody {
+    bool lockdown = 1; // True will keep the door locked
+    bool evacuation = 2; // True will keep the door unlocked.
+}
+message SetDoorEmergencyStatusRequest {
+    SetDoorEmergencyStatusRequestPath path = 1;
+    SetDoorEmergencyStatusRequestParams params = 2;
+    SetDoorEmergencyStatusRequestBody body = 3;
+}
+
+// 7.13 Fetch Door Emergency Status
+message FetchDoorEmergencyStatusRequestPath {
+    
+}
+message FetchDoorEmergencyStatusRequestParams {
+
+}
+message FetchDoorEmergencyStatusRequestBody {
+    bool lockdown = 1; // True will keep the door locked
+    bool evacuation = 2; // True will keep the door unlocked.
+}
+message FetchDoorEmergencyStatusRequest {
+    FetchDoorEmergencyStatusRequestPath path = 1;
+    FetchDoorEmergencyStatusRequestParams params = 2;
+    FetchDoorEmergencyStatusRequestBody body = 3;
+}
+
+// ------------
+
+message ResourceTopology {
+    string id = 1; // Identity ID of the floor
+    string type = 2; // Type of the floor
+    string name = 3; // Name of the floor
+    repeated Resource resources = 4; // Contain all the doors on the floor.
+}
+
+message Resource {
+    string id = 1;   // Identity ID of the door
+    string name = 2; // Name of the door
+    string type = 3; // Type of the door
+    bool is_bind_hub = 4; // Indicate whether the door has bound to a hub device. It can only be used for remote opening if it's bound.
+  }
+
+  message ResourcesResponse {
     string code = 1;
-    string msg = 2;
-}
+    repeated ResourceTopology data = 2;
+    string msg = 3;
+  }
 
-message Pagination {
-    int32 page_num = 1;
-    int32 page_size = 2;
-    int32 total = 3;
-}
+  message ResourceResponse {
+    string code = 1;
+    ResourceTopology data = 2;
+    string msg = 3;
+  }
+
+  message Door {
+    string id = 1; // Identity ID of the door group
+    string name = 2; // Name of the door
+    string full_name = 3; // Full name of the door
+    string floor_id = 4; // Identity ID of the floor
+    string type = 5; // Type of the door
+    string is_bind_hub = 6; // Indicate whether the door has bound to a hub device. It can only be used for remote opening if it's bound.
+    string door_lock_relay_status = 7; // Door lock status. enum door_lock_relay_status {lock,unlock}
+    string door_position_status = 8; // DPS: Door position status, including both open and close . A null value means that no device is connected.
+  }
+
+  message DoorResponse {
+    string code = 1;
+    Door data = 2;
+    string msg = 3;
+  }
+
+  message DoorsResponse {
+    string code = 1;
+    repeated Door data = 2;
+    string msg = 3;
+  }
+
+  message DoorStatusResponse {
+    string code = 1;
+    string data = 2;
+    string msg = 3;
+  }
+
+  message DoorLockingRule {
+    int32 ended_time = 1;
+    string type = 2;
+  }
+
+  message DoorLockingRuleResponse {
+    string code = 1;
+    DoorLockingRule data = 2;
+    string msg = 3;
+  }
+
+  message DoorEmergencyStatus {
+    bool evacuation = 1;
+    bool lockdown = 2;
+  }
+
+  message DoorEmergencyStatusResponse {
+    string code = 1;
+    DoorEmergencyStatus data = 2;
+    string msg = 3;
+  }

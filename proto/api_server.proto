@@ -2,20 +2,45 @@ syntax = "proto3";
 
 package apiserver;
 
+import "google/api/annotations.proto";
+
 service APIServerService {
-  rpc UploadHTTPSCertificate(UploadHTTPSCertificateRequest)
-      returns (APIServerResponse);
-  rpc DeleteHTTPSCertificate(DeleteHTTPSCertificateRequest)
-      returns (APIServerResponse);
+  // 12.1 Upload HTTPS Certificate
+  rpc UploadCertificate(UploadCertificateRequest) returns (APIServerResponse) {
+    option (google.api.http) = {
+      post : "/api/v1/developer/api_server/certificates"
+      body : "*"
+    };
+  }
+  // 12.2 Delete HTTPS Certificate
+  rpc DeleteCertificate(DeleteCertificateRequest) returns (APIServerResponse) {
+    option (google.api.http) = {
+      delete : "/api/v1/developer/api_server/certificates"
+    };
+  }
 }
 
-message UploadHTTPSCertificateRequest {
-  string key = 1;  // Path to the private key file
-  string cert = 2; // Path to the certificate file
+// 12.1 Upload HTTPS Certificate
+message UploadCertificateRequestPath {}
+message UploadCertificateRequestParams {}
+message UploadCertificateRequestBody {
+  bytes key = 1;  // Private Key, ex: server.key
+  bytes cert = 2; // Certificate, ex: server.crt
+}
+message UploadCertificateRequest {
+  UploadCertificateRequestPath path = 1;
+  UploadCertificateRequestParams params = 2;
+  UploadCertificateRequestBody body = 3;
 }
 
-message DeleteHTTPSCertificateRequest {
-  // No body content required for DELETE request
+// 12.2 Delete HTTPS Certificate
+message DeleteCertificateRequestPath {}
+message DeleteCertificateRequestParams {}
+message DeleteCertificateRequestBody {}
+message DeleteCertificateRequest {
+  DeleteCertificateRequestPath path = 1;
+  DeleteCertificateRequestParams params = 2;
+  DeleteCertificateRequestBody body = 3;
 }
 
 message APIServerResponse {

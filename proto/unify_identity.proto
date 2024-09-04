@@ -2,60 +2,175 @@ syntax = "proto3";
 
 package unifyidentity;
 
-message Invitation {
-    string user_id = 1;
-    string email = 2;
-}
-
-message ResourceAssignment {
-    string resource_type = 1;  // Type of resource, e.g., "ev_station", "vpn", "wifi", "camera"
-    repeated string resource_ids = 2;
-}
+import "google/api/annotations.proto";
 
 service UnifyIdentityService {
-    rpc SendInvitation(SendInvitationRequest) returns (InvitationResponse);
-    rpc FetchAvailableResources(FetchAvailableResourcesRequest) returns (ResourcesResponse);
-    rpc AssignResourcesToUser(AssignResourcesRequest) returns (AssignmentResponse);
-    rpc FetchResourcesAssignedToUser(FetchAssignedResourcesRequest) returns (AssignedResourcesResponse);
+
+  // 10.1 Send Unifi Identity Invitations
+  rpc SendUnifiIdentityInvitations(SendUnifiIdentityInvitationsRequest)
+      returns (InvitationStatusResponse) {
+    option (google.api.http) = {
+      post : "/api/v1/developer/users/identity/invitations"
+      body : "*"
+    };
+  }
+
+  // 10.2 Fetch Available Resources
+  rpc FetchAvailableResources(FetchAvailableResourcesRequest)
+      returns (ResourcesResponse) {
+    option (google.api.http) = {
+      get : "/api/v1/developer/users/identity/assignments"
+    };
+  }
+
+  // 10.3 Assign Resources to Users
+  rpc AssignUserResources(AssignUserResourcesRequest)
+      returns (ResourcesResponse) {
+    option (google.api.http) = {
+      post : "/api/v1/developer/users/{id}/identity/assignments"
+      body : "*"
+    };
+  }
+
+  // 10.4 Fetch Resources Assigned to Users
+  rpc FetchUserResources(FetchUserResourcesRequest)
+      returns (ResourcesResponse) {
+    option (google.api.http) = {
+      get : "/api/v1/developer/users/{id}/identity/assignments"
+    };
+  }
+
+  // 10.5 Assign Resources to User Groups
+  rpc AssignUserGroupResources(AssignUserGroupResourcesRequest)
+      returns (ResourcesResponse) {
+    option (google.api.http) = {
+      post : "/api/v1/developer/user_groups/{id}/identity/assignments"
+      body : "*"
+    };
+  }
+
+  // 10.6 Fetch the Resources Assigned to User Groups
+  rpc FetchUserGroupResources(FetchUserGroupResourcesRequest)
+      returns (ResourcesResponse) {
+    option (google.api.http) = {
+      get : "/api/v1/developer/user_groups/{id}/identity/assignments"
+    };
+  }
 }
 
-message SendInvitationRequest {
-    repeated Invitation invitations = 1;
+// ----------------------
+
+// 10.1 Send Unifi Identity Invitations
+message SendUnifiIdentityInvitationsRequestPath {}
+message SendUnifiIdentityInvitationsRequestParams {}
+message SendUnifiIdentityInvitationsRequestBody {
+  repeated Invitation invitations = 1;
+}
+message SendUnifiIdentityInvitationsRequest {
+  SendUnifiIdentityInvitationsRequestPath path = 1;
+  SendUnifiIdentityInvitationsRequestParams params = 2;
+  SendUnifiIdentityInvitationsRequestBody body = 3;
 }
 
+// 10.2 Fetch Available Resources
+message FetchAvailableResourcesRequestPath {}
+message FetchAvailableResourcesRequestParams {
+  // g Display the type of resources; show all when left blank. enum
+  // resource_type {ev_station,vpn,wifi} ex: resource_type=ev_station,wifi,vpn
+  string resource_type = 1;
+}
+message FetchAvailableResourcesRequestBody {}
 message FetchAvailableResourcesRequest {
-    string resource_type = 1;  // E.g., "ev_station", "vpn", "wifi", "camera"
+  FetchAvailableResourcesRequestPath path = 1;
+  FetchAvailableResourcesRequestParams params = 2;
+  FetchAvailableResourcesRequestBody body = 3;
 }
 
-message AssignResourcesRequest {
-    string user_id = 1;
-    repeated ResourceAssignment assignments = 2;
+// 10.3 Assign Resources to Users
+message AssignUserResourcesRequestPath {
+  string id = 1; // Identity ID of the user.
+}
+message AssignUserResourcesRequestParams {}
+message AssignUserResourcesRequestBody {
+  string resource_type = 1; // enum resource_type {ev_station,vpn,wifi}
+  repeated ResourceId resource_ids = 2; // Identity ID of the resources.
+}
+message AssignUserResourcesRequest {
+  AssignUserResourcesRequestPath path = 1;
+  AssignUserResourcesRequestParams params = 2;
+  AssignUserResourcesRequestBody body = 3;
 }
 
-message FetchAssignedResourcesRequest {
-    string user_id = 1;
+// 10.4 Fetch Resources Assigned to Users
+message FetchUserResourcesRequestPath { string id = 1; }
+message FetchUserResourcesRequestParams {}
+message FetchUserResourcesRequestBody {}
+message FetchUserResourcesRequest {
+  FetchUserResourcesRequestPath path = 1;
+  FetchUserResourcesRequestParams params = 2;
+  FetchUserResourcesRequestBody body = 3;
 }
 
-message InvitationResponse {
-    string code = 1;
-    string msg = 2;
-    repeated Invitation data = 3;
+// 10.5 Assign Resources to User Groups
+message AssignUserGroupResourcesRequestPath { string id = 1; }
+message AssignUserGroupResourcesRequestParams {}
+message AssignUserGroupResourcesRequestBody {
+  string resource_type = 1;
+  repeated ResourceId resource_ids = 2;
 }
+message AssignUserGroupResourcesRequest {
+  AssignUserGroupResourcesRequestPath path = 1;
+  AssignUserGroupResourcesRequestParams params = 2;
+  AssignUserGroupResourcesRequestBody body = 3;
+}
+
+// 10.6 Fetch the Resources Assigned to User Groups
+
+message FetchUserGroupResourcesRequestPath { string id = 1; }
+message FetchUserGroupResourcesRequestParams {}
+message FetchUserGroupResourcesRequestBody {}
+message FetchUserGroupResourcesRequest {
+  FetchUserGroupResourcesRequestPath path = 1;
+  FetchUserGroupResourcesRequestParams params = 2;
+  FetchUserGroupResourcesRequestBody body = 3;
+}
+
+// -------------
+
+message Invitation {
+  string user_id = 1;
+  string email = 2;
+}
+
+message InvitationStatus {
+  string error_code = 1;
+  string error_msg = 2;
+  string user_email = 3;
+  string user_id = 4;
+}
+
+message InvitationStatusResponse {
+  string code = 1;
+  repeated InvitationStatus data = 2;
+  string msg = 3;
+}
+
+message Resource {
+  string id = 2;
+  string name = 3;
+  string short_name = 4;
+  bool deleted = 5;
+  string metadata = 6;
+}
+
+message ResourceId { string id = 1; }
+
+message ResourceList { repeated Resource resources = 1; }
+
+message Data { map<string, ResourceList> resources = 1; }
 
 message ResourcesResponse {
-    string code = 1;
-    string msg = 2;
-    repeated string resource_ids = 3;
-}
-
-message AssignmentResponse {
-    string code = 1;
-    string msg = 2;
-    repeated ResourceAssignment data = 3;
-}
-
-message AssignedResourcesResponse {
-    string code = 1;
-    string msg = 2;
-    repeated ResourceAssignment data = 3;
+  string code = 1;
+  Data data = 2;
+  string msg = 4;
 }
