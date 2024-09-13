@@ -8,10 +8,10 @@
   "description": "",
   "scripts": {
     "clean": "rm -rf dist && mkdir dist",
-    "generate:js": "npm run clean && protoc -I=./proto -I=./third_party/api-common-protos --js_out=import_style=commonjs,binary:dist ./proto/*.proto",
-    "generate:ts": "npm run clean && protoc -I=./proto -I=./third_party/api-common-protos --plugin=protoc-gen-ts=./node_modules/.bin/protoc-gen-ts --ts_out=dist ./proto/*.proto",
-    "generate:python": "npm run clean && protoc -I=./proto -I=./third_party/api-common-protos --python_out=dist ./proto/*.proto",
-    "generate:html": "protoc -I=./proto -I=./third_party/api-common-protos --doc_out=./docs --doc_opt=html,index.html ./proto/*.proto"
+    "generate:js": "npm run clean && protoc -I=./proto -I=../api-common-protos --js_out=import_style=commonjs,binary:dist ./proto/*.proto ../api-common-protos/google/api/*.proto",
+    "generate:ts": "npm run clean && protoc -I=./proto -I=../api-common-protos --plugin=protoc-gen-ts=./node_modules/.bin/protoc-gen-ts --ts_out=dist ./proto/*.proto ../api-common-protos/google/api/*.proto",
+    "generate:python": "npm run clean && protoc -I=./proto -I=../api-common-protos --python_out=dist ./proto/*.proto ../api-common-protos/google/api/*.proto",
+    "generate:html": "protoc -I=./proto -I=../api-common-protos --doc_out=./docs --doc_opt=html,index.html ./proto/*.proto ../api-common-protos/google/api/*.proto"
   },
   "dependencies": {
     "protoc-gen-js": "^3.21.2",

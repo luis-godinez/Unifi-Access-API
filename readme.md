@@ -17,22 +17,43 @@ This is unofficial API documentation for the Ubiquiti Access API. It is provided
 
 ## API Documentation
 
-[View API Documentation](https://htmlpreview.github.io/?https://github.com/luis-godinez/Unifi-Access-API/blob/main/docs/index.html)
+[View API Documentation](https://htmlpreview.github.io/?https://github.com/luis-godinez/unifi-access-api/blob/main/docs/index.html)
 
 ## Getting Started
 
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/luis-godinez/Unifi-Access-API.git
-cd unifi-access-api
+git clone https://github.com/luis-godinez/unifi-access-api.git
 ```
 
-### 2. Install Dependencies
+### 2. Clone the Google Proto Repo
+> Note: The repo may be cloned within the api repo itself, but you'll need to change the dependecy path in npm script path.
 
-`npm install`
+```
+git clone https://github.com/googleapis/api-common-protos.git
+```
 
-### 3. Generate Code
+>unifi-access-api/package.json
+
+Default (outside repo)  
+```
+"generate:js": "npm run clean && protoc -I=./proto -I=../api-common-protos --js_out=import_style=commonjs,binary:dist ../proto/*.proto ../api-common-protos/google/api/*.proto",
+```
+
+Custom (inside repo):
+```
+"generate:js": "npm run clean && protoc -I=./proto -I=../api-common-protos --js_out=import_style=commonjs,binary:dist ./proto/*.proto ../api-common-protos/google/api/*.proto",
+```
+
+### 3. Install Dependencies
+
+```
+cd unifi-access-api
+npm install
+```
+
+### 4. Generate Code
 
 Javascript: `npm run generate:js`
 
@@ -40,7 +61,7 @@ Typescript: `npm run generate:ts`
 
 Python: `npm run generate:python`
 
-### 4. Use in your project
+### 5. Use in your project
 
 Javascript(commonJS):  
 `const { Visitor } = require('../path/to/generated/dist/visitor_pb.js');`
